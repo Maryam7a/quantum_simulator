@@ -60,28 +60,20 @@ function App() {
     }
   };
 
-  // **🟢 Step 1: Send gate & initial state to GatesGrid**
-  const handleGateClick = (gate) => {
-    if (buttonsDisabled) return;
-    console.log("umm does it come here lol?");
-    console.log(`🟢 handleGateClick in App.js: ${gate}`);
-    // Update applied gates list
-    setAppliedGates((prevGates) => {
-      const updatedGates = [...prevGates, gate];
-      console.log("✅ also here --- Updated Applied Gates List:", updatedGates);
-      return updatedGates;
-    });
-  };
-
   // **🟢 Step 2: Receive transformed matrix from GatesGrid**
-  const handleMatrixUpdate = (newMatrix) => {
+  const handleMatrixUpdate = (newMatrix, gate) => {
     console.log("🔵 heree -- Updated Quantum Matrix received in App.js:", newMatrix);
-
+    console.log("🟢 Gate received in App.js:", gate);
     // Update matrix states list
     setMatrixStates((prevStates) => {
       const updatedStates = [...prevStates, newMatrix];
       console.log("✅ Updated Matrix States List:", updatedStates);
       return updatedStates;
+    });
+    setAppliedGates((prevGates) => {
+      const updatedGates = [...prevGates, gate];
+      console.log("✅ Updated Applied Gates List:", updatedGates);
+      return updatedGates;
     });
   };
 
