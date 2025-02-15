@@ -1,0 +1,10 @@
+.bar-chart-container {
+    width: 200px;
+    /* Adjusted to reduce overall chart width */
+    padding: 10px;
+}
+
+.bar-chart-title {
+    text-align: left;
+    margin-bottom: 10px;
+}

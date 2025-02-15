@@ -1,0 +1,49 @@
+/* Make entire table transparent */
+.ant-table {
+    background: transparent !important;
+}
+
+/* Make table body transparent */
+.ant-table-tbody>tr>td {
+    background: transparent !important;
+    border: none !important;
+    color: white !important;
+}
+
+/* Hide the header (if not needed) */
+.ant-table-thead {
+    display: none !important;
+}
+
+/* Reduce table row height */
+.ant-table-tbody>tr>td {
+    padding: 2px !important;
+    line-height: 1 !important;
+}
+
+/* Reduce spacing inside input fields */
+.ant-input {
+    padding: 2px !important;
+    text-align: center !important;
+}
+
+/* Style matrix brackets */
+.matrix-wrapper {
+    display: flex;
+    align-items: center;
+    /* justify-content: center; */
+    /* gap: 5px; */
+}
+
+.matrix-bracket {
+    font-size: 1.3rem;
+    color: rgb(105, 105, 105);
+    font-weight: lighter;
+    position: relative;
+    top:6px;
+    /* margin: 1 px; */
+}
+
+.matrix-bracket.right {
+    margin-left: 35px;
+}

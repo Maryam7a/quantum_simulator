@@ -6,17 +6,14 @@ import CircuitBuilder from "./components/CircuitBuilder";
 import QuantumMatrix from "./components/quantummatrix";
 import { createInitialQuantumState } from "./utils/quantumGates"; // Import function to generate state
 import { Button } from "antd";
-import GatesGrid from "./components/GatesGrid";
-import CircuitLine from "./components/CircuitLine"; // Import the separate circuit line component
 
 function App() {
+  const [activeTab, setActiveTab] = useState("32-bit");
   const [c1, setC1] = useState({ a: "", b: "" });
   const [c2, setC2] = useState({ c: "", d: "" });
   const [shots, setShots] = useState("");
   const [buttonsDisabled, setButtonsDisabled] = useState(true);
   const [initialQuantumState, setInitialQuantumState] = useState(null); // Stores validated state
-  const [appliedGates, setAppliedGates] = useState([]); // Store applied gates
-  const [matrixStates, setMatrixStates] = useState([]); // Store transformed matrices
 
   // Handle input changes
   const handleInputChange = (e, key, field) => {
@@ -53,62 +50,44 @@ function App() {
       const initialState = createInitialQuantumState(a, b, c, d);
       console.log("Initial Quantum State:", initialState);
       setInitialQuantumState(initialState);
-      setMatrixStates([initialState]); // Store as first matrix state
     } else {
       setButtonsDisabled(true); // Disable gates
       console.log("❌ Invalid input. Gates disabled. Sum:", sum);
     }
   };
 
-  // **🟢 Step 1: Send gate & initial state to GatesGrid**
-  const handleGateClick = (gate) => {
-    if (buttonsDisabled) return;
-    console.log("umm does it come here lol?");
-    console.log(`🟢 handleGateClick in App.js: ${gate}`);
-    // Update applied gates list
-    setAppliedGates((prevGates) => {
-      const updatedGates = [...prevGates, gate];
-      console.log("✅ also here --- Updated Applied Gates List:", updatedGates);
-      return updatedGates;
-    });
-  };
-
-  // **🟢 Step 2: Receive transformed matrix from GatesGrid**
-  const handleMatrixUpdate = (newMatrix) => {
-    console.log("🔵 heree -- Updated Quantum Matrix received in App.js:", newMatrix);
-
-    // Update matrix states list
-    setMatrixStates((prevStates) => {
-      const updatedStates = [...prevStates, newMatrix];
-      console.log("✅ Updated Matrix States List:", updatedStates);
-      return updatedStates;
-    });
-  };
-
   return (
     <div className="app-container">
-      <div className="content-container">
-        <CircuitLine appliedGates={appliedGates} matrixStates={matrixStates} />
-        {/* Quantum Matrix Input Section */}
-        <QuantumMatrix c1={c1} c2={c2} handleInputChange={handleInputChange} />
-        {/* Validate Button */}
-        <div style={{ marginTop: "10px" }}>
-          <Button type="primary" onClick={handleValidateInput}>
-            Validate
-          </Button>
-        </div>
-        {/* Gates Grid */}
-        <GatesGrid
-          buttonsDisabled={buttonsDisabled}
-          initialQuantumState={initialQuantumState}
-          onMatrixUpdate={handleMatrixUpdate}
-        />
-        {/* Bottom Section: Graphs & Bloch Sphere */}
-        <div className="bottom-section">
-          <div className="bloch-container">
-            <BlochSphere />
+      <div className="tab-content">
+        <div className="content-container">
+          {/* Circuit Builder */}
+          <div className="circuit-builder-and-bloch">
+            <CircuitBuilder
+              buttonsDisabled={buttonsDisabled}
+              initialQuantumState={initialQuantumState}
+              shots={shots} // Pass shots for measurement gate
+            />
           </div>
-          <BarChartComponent title="Probabilities" />
+          {/* Quantum Matrix Input Section */}
+          <QuantumMatrix
+            c1={c1}
+            c2={c2}
+            handleInputChange={handleInputChange}
+          />
+          {/* Validate Button */}
+          <div style={{ marginTop: "10px", textAlign: "center" }}>
+            <Button type="primary" onClick={handleValidateInput}>
+              Validate
+            </Button>
+          </div>
+
+          {/* Bottom Section: Graphs & Bloch Sphere */}
+          <div className="bottom-section">
+            <div className="bloch-container">
+              <BlochSphere />
+            </div>
+            <BarChartComponent title="Probabilities" />
+          </div>
         </div>
       </div>
     </div>

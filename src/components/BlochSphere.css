@@ -1,0 +1,10 @@
+.bloch-container {
+    width: 300px;
+    /* Adjust size */
+    height: 300px;
+    margin: 0 auto;
+    /* Center-align if needed in its own container */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

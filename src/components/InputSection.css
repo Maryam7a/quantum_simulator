@@ -1,0 +1,106 @@
+.input-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 10px;
+    flex-wrap: wrap;
+    /* Ensures responsiveness */
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0px;
+}
+
+.input-group h3 {
+    font-weight: 400;
+    /* Less bold (normal weight) */
+    font-size: 15px;
+    /* Adjust size if needed */
+    color: #ddd;
+    /* Optional: Slightly softer color */
+}
+
+.input-group input {
+    width: 150px;
+    padding: 8px;
+    border: 1px solid #f6f6f6c6;
+    /* White outline */
+    border-radius: 4px;
+    background-color: transparent;
+    /* No fill */
+    color: #ffffff;
+    /* White text for consistency */
+}
+
+.input-group input::placeholder {
+    color: #aaaaaa;
+    /* Light gray placeholder text */
+    font-style: italic;
+    /* Optional styling for placeholder */
+}
+
+.input-group input:focus {
+    outline: none;
+    /* Remove default focus styles */
+    border-color: #2273ec;
+    /* Green outline on focus */
+    box-shadow: 0 0 5px #2273ec;
+    /* Optional: Add a glow effect */
+}
+
+.validate-button {
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.validate-button:hover {
+    background-color: #45a049;
+}
+
+.complex-input-box {
+    display: flex;
+    align-items: center;
+    border: 1px solid #f6f6f6c6;
+    /* White border */
+    border-radius: 4px;
+    padding: 5px 15px;
+    /* Adjust padding inside the box (left and right gaps) */
+    width: fit-content;
+    background-color: transparent;
+}
+
+.complex-input-box input {
+    flex: 1;
+    min-width: 60px;
+    /* Minimum width of inputs */
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #ffffff;
+    text-align: center;
+    margin-right: 5px;
+    /* Adjust gap between input and + sign */
+}
+
+.complex-input-box input::placeholder {
+    color: #aaaaaa;
+    /* Light gray placeholder text */
+}
+
+.plus-symbol {
+    margin: 0 8px;
+    /* Adjust gap around + sign (both sides) */
+}
+
+.imaginary-symbol {
+    margin-left: 5px;
+    /* Adjust gap between imaginary input and 'i' */
+}

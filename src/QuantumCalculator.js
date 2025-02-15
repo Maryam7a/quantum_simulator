@@ -10,7 +10,7 @@ const QuantumCalculator = () => {
     const url = "http://localhost:8080/data";
 
     const data = {
-      a: 0.707,
+      a: 0.2, // 0.707 for correct result
       b: 0,
       c: 0.707,
       d: 0,
