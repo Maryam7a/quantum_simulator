@@ -72,80 +72,8 @@
   /* Space between sections */
   align-items: stretch;
   /* Stretch items to fit */
-  height: calc(100vh - 100px);
+  height: calc(100vh - 50px);
   /* Account for tabs and padding */
-}
-
-
-.input-section {
-  margin-top: 0;
-}
-
-.input-section h3 {
-  margin: 10px 0 5px;
-}
-
-.input-section input {
-  margin-right: 10px;
-  padding: 5px;
-  width: 50px;
-}
-
-.input-section button {
-  margin-top: 10px;
-  padding: 10px 20px;
-  background-color: #555;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.input-section button:hover {
-  background-color: #777;
-}
-
-.result {
-  margin-top: 20px;
-  padding: 10px;
-  border-radius: 5px;
-  background-color: #222;
-  color: white;
-}
-
-.result.error {
-  background-color: #ff0000;
-  color: white;
-}
-
-.gates button {
-  margin: 5px;
-  padding: 10px 20px;
-  background-color: #444;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.gates button:disabled {
-  background-color: #222;
-  color: #666;
-  cursor: not-allowed;
-}
-
-.circuit-builder-and-bloch {
-  display: flex;
-  flex-direction: row;
-  /* Arrange items horizontally */
-  align-items: flex-start;
-  /* Align items at the top */
-  justify-content: space-between;
-  /* Space between items */
-  margin-top: 50px;
-  /* Add spacing from the top section */
-  height: 300px;
-  margin-left: 40px;
 }
 
 .bottom-section {
@@ -174,4 +102,55 @@
 .circuit-line-container {
   margin-top: 5px;
   /* Reduce space above Circuit Line */
+}
+
+/* Centering the button container */
+.validate-button-container {
+  display: flex;
+  align-items: center;
+}
+
+/* Circular button */
+.validate-button {
+  width: 20px;
+  height: 20px;
+  background-color: #373030;
+  color: rgb(232, 232, 232);
+  font-size: 1.5rem;
+  font-weight: normal;
+  border-radius: 50%;
+  /* Makes it a perfect circle */
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+/* Hover effect */
+.validate-button:hover {
+  background-color: #1245d1;
+  transform: scale(1.1);
+}
+
+/* Optional: Add a subtle shadow effect on click */
+.validate-button:active {
+  transform: scale(1.05);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.quantum-matrix-container {
+  /* display: flex; */
+  /* justify-content: center; */
+  /* align-items: center; */
+  width:15%;
+  padding: 10px;
+  /* border: 1px solid rgba(255, 255, 255, 0.2); */
+  /* Example: subtle border */
+  border-radius: 10px;
+  /* Rounded corners */
+  background-color: rgba(255, 255, 255, 0.05);
+  /* Slight background for visibility */
 }

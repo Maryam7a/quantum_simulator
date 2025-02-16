@@ -1,6 +1,5 @@
 import React from "react";
 import { Table, Input } from "antd";
-import { color } from "chart.js/helpers";
 import "./quantummatrix.css";
 
 
@@ -14,7 +13,6 @@ const QuantumMatrix = ({ c1, c2, handleInputChange }) => {
     },
 
     {
-      // title: "Real",
       dataIndex: "real",
       width: "60px",
       render: (text, record) => (
@@ -40,7 +38,6 @@ const QuantumMatrix = ({ c1, c2, handleInputChange }) => {
       // width: 10, // Keep the width small
     },
     {
-      // title: "Imaginary",
       dataIndex: "imag",
       width: "60px",
       render: (text, record) => (
@@ -63,7 +60,7 @@ const QuantumMatrix = ({ c1, c2, handleInputChange }) => {
     {
       dataIndex: "i",
       render: () => <span style={{ color: "grey" }}>i</span>, // Apply color here
-      width: 0, // Keep the width small
+      width: 0,
     },
   ];
 

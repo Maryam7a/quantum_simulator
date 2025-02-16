@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import BarChartComponent from "./components/BarChartComponent";
 import "./App.css";
 import BlochSphere from "./components/BlochSphere";
-import CircuitBuilder from "./components/CircuitBuilder";
 import QuantumMatrix from "./components/quantummatrix";
 import { createInitialQuantumState } from "./utils/quantumGates"; // Import function to generate state
 import { Button } from "antd";
@@ -82,12 +81,18 @@ function App() {
       <div className="content-container">
         <CircuitLine appliedGates={appliedGates} matrixStates={matrixStates} />
         {/* Quantum Matrix Input Section */}
-        <QuantumMatrix c1={c1} c2={c2} handleInputChange={handleInputChange} />
+        <div className="quantum-matrix-container">
+          <QuantumMatrix
+            c1={c1}
+            c2={c2}
+            handleInputChange={handleInputChange}
+          />
+        </div>
         {/* Validate Button */}
-        <div style={{ marginTop: "10px" }}>
-          <Button type="primary" onClick={handleValidateInput}>
-            Validate
-          </Button>
+        <div className="validate-button-container">
+          <button className="validate-button" onClick={handleValidateInput}>
+            ✔
+          </button>
         </div>
         {/* Gates Grid */}
         <GatesGrid

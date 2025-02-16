@@ -20,7 +20,7 @@
 }
 
 .gate-button {
-    background-color: #0913c6;
+    background-color: #1e27cd;
     border: 1px solid #666;
     border-radius: 5px;
     text-align: center;
@@ -32,7 +32,7 @@
 }
 
 .gate-button.disabled {
-    background-color: #de0fde;
+    background-color: #5d5d65;
     color: #bbb;
     cursor: not-allowed;
 }
