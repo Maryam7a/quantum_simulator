@@ -1,13 +1,17 @@
 import React from "react";
 import "./CircuitLine.css"; // Styling
 import MatrixDisplay from "./matrixDisplay";
+import QuantumMatrix from "./quantummatrix"; // Import QuantumMatrix
 
-const CircuitLine = ({ appliedGates, matrixStates, onUndo }) => {
+const CircuitLine = ({ appliedGates, matrixStates, onUndo, c1, c2, handleInputChange }) => {
   console.log("Circuit Line Props:", appliedGates, matrixStates);
   return (
     <div className="circuit-line-container">
-      {/* Qubit Label */}
-      <span className="qubit-label">|q₀⟩</span>
+      {/* Left Side: Qubit Label + Input Quantum Matrix */}
+      <div className="qubit-matrix-container">
+        <span className="qubit-label">|q₀⟩</span>
+        <QuantumMatrix c1={c1} c2={c2} handleInputChange={handleInputChange} />
+      </div>
 
       <div className="circuit-line">
         {appliedGates.map((gate, index) => (
@@ -20,11 +24,15 @@ const CircuitLine = ({ appliedGates, matrixStates, onUndo }) => {
           </div>
         ))}
       </div>
-
-      {/* Undo Button */}
-      <button className="undo-button" onClick={onUndo} disabled={appliedGates.length === 0}>
-        Undo
-      </button>
+      <div className="undo-button-container">
+        <button
+          className="undo-button"
+          onClick={onUndo}
+          disabled={appliedGates.length === 0}
+        >
+          Undo
+        </button>
+      </div>
     </div>
   );
 };

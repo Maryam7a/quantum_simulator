@@ -1,29 +1,27 @@
-/* Container for the circuit line */
+/* entire container */
 .circuit-line-container {
     border: 1px solid #c51ec2;
     color: rgb(223, 36, 148);
     display: flex;
     align-items: center;
     justify-content: center;
-    /* flex-direction: column; */
     width: 100%;
-    height: 200px;
-    /* Adjust spacing as needed */
+    height: 25%;
+    position: relative;
 }
 
 /* Qubit label (|q₀⟩) styling */
 .qubit-label {
+    padding-top: 28%;
     font-size: 1.0rem;
     color: rgb(157, 21, 21);
     font-weight: normal;
-    margin-right: 100px;
-    margin-left: 0px;
 }
 
-/* The entire container*/
+/* weird inside container with gates and matrices*/
 .circuit-line {
     position: relative;
-    height: 200px;
+    height: 100%;
     width: 80%;
     display: flex;
     align-items: center;
@@ -40,12 +38,12 @@
 /* Draw a horizontal line */
 .circuit-line::before {
     content: '';
-    margin-bottom: 30px;
+    /* margin-bottom: 30px; */
     /* padding-bottom: 0px; */
     position: absolute;
     top: 35%;
-    left: 0;
-    height: 2px;
+    /* left: 0; */
+    height: 1%;
     /* Line thickness */
     width: 100%;
     background-color: rgb(68, 68, 68);
@@ -82,16 +80,33 @@
     margin-top: 15px;
 }
 
+.undo-button-container {
+    height: 100%;
+    width: 5%;
+    border: 1px solid #e0330c;
+    display: flex;
+    align-items: center;
+    /* Center vertically */
+    justify-content: center;
+    /* Center horizontally */
+    position: relative;
+}
+
 /* Undo button styling */
 .undo-button {
-    position: relative;
-    margin-left: 20px;
-    padding: 5px 10px;
+    position: absolute;
+    top: 30%;
+    /* Moves it to 35% of the parent's height */
+    /* left: 50%; */
+    /* Center it horizontally */
+    /* transform: translate(-50%, -50%); */
+    /* Adjusts for proper centering */
     background-color: #e74c3c;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    padding: 8px 12px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
@@ -103,4 +118,14 @@
 .transparent-container{
     background-color: transparent;
     height:50px;
+}
+
+.qubit-matrix-container{
+    border: 1px solid #1ec574;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    margin-right: 20px;
+    height: 100%;
 }

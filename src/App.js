@@ -79,15 +79,7 @@ function App() {
   return (
     <div className="app-container">
       <div className="content-container">
-        <CircuitLine appliedGates={appliedGates} matrixStates={matrixStates} />
-        {/* Quantum Matrix Input Section */}
-        <div className="quantum-matrix-container">
-          <QuantumMatrix
-            c1={c1}
-            c2={c2}
-            handleInputChange={handleInputChange}
-          />
-        </div>
+        <CircuitLine appliedGates={appliedGates} matrixStates={matrixStates} c1={c1} c2={c2} handleInputChange={handleInputChange}/>
         {/* Validate Button */}
         <div className="validate-button-container">
           <button className="validate-button" onClick={handleValidateInput}>

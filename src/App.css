@@ -94,11 +94,6 @@
   /* Let height adjust based on content */
 }
 
-.quantum-matrix-container {
-  margin-bottom: 5px;
-  /* Reduce space below QuantumMatrix */
-}
-
 .circuit-line-container {
   margin-top: 5px;
   /* Reduce space above Circuit Line */
