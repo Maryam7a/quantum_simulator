@@ -12,7 +12,7 @@
 
 /* Qubit label (|q₀⟩) styling */
 .qubit-label {
-    padding-top: 28%;
+    padding-top: 37%;
     font-size: 1.0rem;
     color: rgb(188, 177, 177);
     font-weight: normal;
@@ -54,7 +54,6 @@
 .dropped-gate {
     margin-left: 100px;
     margin-right: 40px;
-    /* padding-top: 40px; */
     margin-bottom: 5px;
     margin-top: 30px;
     background-color: #acacbe;
@@ -109,18 +108,53 @@
     background-color: #cccccc;
     cursor: not-allowed;
 }
-
+/*between the applied gate and the updated matrix*/
 .transparent-container{
     background-color: transparent;
     height:50px;
 }
 
 .qubit-matrix-container{
-    /* border: 1px solid #1ec574; */
+    border: 1px solid #cb5908;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
     margin-right: 20px;
     height: 100%;
+}
+
+/* Validate button inside qubit-matrix-container */
+.validate-button-container {
+    display: flex;
+    justify-content: center;
+    /* Center horizontally */
+    align-items: center;
+    /* margin-top: 10px; */
+    /* Space below the quantum matrix */
+    width: fit-content;
+    /* Reduce width to fit button */
+}
+
+/* Circular validate button */
+.validate-button {
+    width: 25px;
+    height: 25px;
+    background-color: #008cba;
+    color: white;
+    font-size: 1.2rem;
+    border-radius: 50%;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+/* Hover effect */
+.validate-button:hover {
+    background-color: #005f87;
+    transform: scale(1.1);
 }

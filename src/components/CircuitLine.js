@@ -3,7 +3,7 @@ import "./CircuitLine.css"; // Styling
 import MatrixDisplay from "./matrixDisplay";
 import QuantumMatrix from "./quantummatrix"; // Import QuantumMatrix
 
-const CircuitLine = ({ appliedGates, matrixStates, onUndo, c1, c2, handleInputChange }) => {
+const CircuitLine = ({ appliedGates, matrixStates, onUndo, c1, c2, handleInputChange, handleValidateInput }) => {
   console.log("Circuit Line Props:", appliedGates, matrixStates);
   return (
     <div className="circuit-line-container">
@@ -11,6 +11,13 @@ const CircuitLine = ({ appliedGates, matrixStates, onUndo, c1, c2, handleInputCh
       <div className="qubit-matrix-container">
         <span className="qubit-label">|q₀⟩</span>
         <QuantumMatrix c1={c1} c2={c2} handleInputChange={handleInputChange} />
+
+        {/* Validate Button Inside CircuitLine */}
+        <div className="validate-button-container">
+          <button className="validate-button" onClick={handleValidateInput}>
+            ✔
+          </button>
+        </div>
       </div>
 
       <div className="circuit-line">

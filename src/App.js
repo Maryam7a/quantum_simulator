@@ -79,13 +79,14 @@ function App() {
   return (
     <div className="app-container">
       <div className="content-container">
-        <CircuitLine appliedGates={appliedGates} matrixStates={matrixStates} c1={c1} c2={c2} handleInputChange={handleInputChange}/>
-        {/* Validate Button */}
-        <div className="validate-button-container">
-          <button className="validate-button" onClick={handleValidateInput}>
-            ✔
-          </button>
-        </div>
+        <CircuitLine
+          appliedGates={appliedGates}
+          matrixStates={matrixStates}
+          c1={c1}
+          c2={c2}
+          handleInputChange={handleInputChange}
+          handleValidateInput={handleValidateInput} // Pass function as a prop
+        />
         {/* Gates Grid */}
         <GatesGrid
           buttonsDisabled={buttonsDisabled}
