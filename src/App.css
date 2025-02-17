@@ -95,18 +95,21 @@
 }
 
 .circuit-line-container {
+  border: 1px solid #0bbe11;
   margin-top: 5px;
   /* Reduce space above Circuit Line */
 }
 
 /* Centering the button container */
 .validate-button-container {
+  border: 1px solid #c51ec2;
   display: flex;
   align-items: center;
 }
 
 /* Circular button */
 .validate-button {
+  border: 1px solid #092bbe;
   width: 20px;
   height: 20px;
   background-color: #373030;

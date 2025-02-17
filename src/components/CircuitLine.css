@@ -1,7 +1,7 @@
 /* entire container */
 .circuit-line-container {
-    /* border: 1px solid #c51ec2; */
-    color: rgb(223, 36, 148);
+    border: 1px solid #1e2fc5;
+    /* color: rgb(223, 36, 148); */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -96,11 +96,6 @@
 .undo-button {
     position: absolute;
     top: 30%;
-    /* Moves it to 35% of the parent's height */
-    /* left: 50%; */
-    /* Center it horizontally */
-    /* transform: translate(-50%, -50%); */
-    /* Adjusts for proper centering */
     background-color: #928d8c;
     color: white;
     border: none;
