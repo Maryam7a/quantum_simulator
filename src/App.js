@@ -7,6 +7,8 @@ import { createInitialQuantumState } from "./utils/quantumGates"; // Import func
 import { Button } from "antd";
 import GatesGrid from "./components/GatesGrid";
 import CircuitLine from "./components/CircuitLine"; // Import the separate circuit line component
+import { convertInputToVector } from "./utils/convertInputToVector";
+
 
 function App() {
   const [c1, setC1] = useState({ a: "", b: "" });
@@ -16,6 +18,8 @@ function App() {
   const [initialQuantumState, setInitialQuantumState] = useState(null); // Stores validated state
   const [appliedGates, setAppliedGates] = useState([]); // Store applied gates
   const [matrixStates, setMatrixStates] = useState([]); // Store transformed matrices
+  const [blochVector, setBlochVector] = useState(null);
+
 
   // Handle input changes
   const handleInputChange = (e, key, field) => {
@@ -48,6 +52,11 @@ function App() {
       setButtonsDisabled(false); // Enable gates
       console.log("✅ Input is valid. Gates enabled. Sum:", sum);
 
+      // Compute Bloch Sphere Vector
+      const vector = convertInputToVector(a, b, c, d);
+      console.log("🟢 hmmmm Computed Bloch Sphere Vector:", vector);
+      setBlochVector(vector); // Store in state
+
       // Store the initial quantum state
       const initialState = createInitialQuantumState(a, b, c, d);
       console.log("Initial Quantum State:", initialState);
@@ -56,6 +65,7 @@ function App() {
     } else {
       setButtonsDisabled(true); // Disable gates
       console.log("❌ Invalid input. Gates disabled. Sum:", sum);
+      setBlochVector(null); // Remove the vector if input is invalid
     }
   };
 
@@ -96,7 +106,10 @@ function App() {
         {/* Bottom Section: Graphs & Bloch Sphere */}
         <div className="bottom-section">
           <div className="bloch-container">
-            <BlochSphere appliedGates={appliedGates} />
+            <BlochSphere
+              appliedGates={appliedGates}
+              blochVector={blochVector}
+            />
           </div>
           <BarChartComponent title="Probabilities" />
         </div>
