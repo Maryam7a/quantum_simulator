@@ -90,7 +90,7 @@ function App() {
         {/* Gates Grid */}
         <GatesGrid
           buttonsDisabled={buttonsDisabled}
-          initialQuantumState={initialQuantumState}
+          initialQuantumState={matrixStates[matrixStates.length - 1]}
           onMatrixUpdate={handleMatrixUpdate}
         />
         {/* Bottom Section: Graphs & Bloch Sphere */}
