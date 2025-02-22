@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import "./BlochSphere.css";
 
-const BlochSphere = () => {
+const BlochSphere = ({ appliedGates }) => {
   const mountRef = useRef(null);
   let sphereGroup; // Group for Bloch sphere + vector
 
@@ -81,18 +81,27 @@ const BlochSphere = () => {
     // Camera position
     camera.position.z = 3;
 
-    // ✅ Apply an X-Gate Transformation
-    const applyXGate = () => {
-      sphereGroup.rotation.x += Math.PI; // Rotate the sphere (and vector inside) 180° around X-axis
-    };
+    if (appliedGates.length === 0) {
+      console.log("No gates applied yet.");
+    }
 
-    // Apply the X-gate transformation once
-    applyXGate();
+    const lastGate = appliedGates[appliedGates.length - 1]; // Get the last gate applied
+    console.log("🔵Bloch Sphere Last applied gate:", lastGate);
+
+    applyGateTransformation(lastGate);
+
+    // // ✅ Apply an X-Gate Transformation
+    // const applyXGate = () => {
+    //   sphereGroup.rotation.x += Math.PI; // Rotate the sphere (and vector inside) 180° around X-axis
+    // };
+
+    // // Apply the X-gate transformation once
+    // applyXGate();
 
     // Animation loop with smooth rotation
     const animate = () => {
       requestAnimationFrame(animate);
-      sphereGroup.rotation.x += 0.005; // Sphere and vector rotate together
+      // sphereGroup.rotation.x += 0.005; // Sphere and vector rotate together
       controls.update();
       renderer.render(scene, camera);
     };
@@ -103,9 +112,32 @@ const BlochSphere = () => {
     return () => {
       mountRef.current.removeChild(renderer.domElement);
     };
-  }, []);
+  }, [appliedGates]);
+
+  const applyGateTransformation = (gate) => {
+    if (!sphereGroup) return; // Ensure the sphere is defined
+
+    switch (gate) {
+      case "X":
+        sphereGroup.rotation.x += Math.PI; // Rotate 180° around X-axis
+        console.log("🔄 Applying X Gate: Rotating sphere 180° around X-axis.");
+        break;
+      case "Y":
+        sphereGroup.rotation.y += Math.PI; // Rotate 180° around Y-axis
+        console.log("🔄 Applying Y Gate: Rotating sphere 180° around Y-axis.");
+        break;
+      case "Z":
+        sphereGroup.rotation.z += Math.PI; // Rotate 180° around Z-axis
+        console.log("🔄 Applying Z Gate: Rotating sphere 180° around Z-axis.");
+        break;
+      default:
+        console.log("⚠️ No transformation defined for this gate.");
+    }
+  };
+
 
   return <div ref={mountRef} />;
 };
+
 
 export default BlochSphere;

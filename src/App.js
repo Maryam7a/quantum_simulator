@@ -96,7 +96,7 @@ function App() {
         {/* Bottom Section: Graphs & Bloch Sphere */}
         <div className="bottom-section">
           <div className="bloch-container">
-            <BlochSphere />
+            <BlochSphere appliedGates={appliedGates} />
           </div>
           <BarChartComponent title="Probabilities" />
         </div>

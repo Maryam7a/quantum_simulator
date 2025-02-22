@@ -80,7 +80,7 @@
   display: flex;
   flex-direction: row;
   /* Align items in a row */
-  justify-content: center;
+  justify-content: space-between;
   /* Center-align all items */
   align-items: center;
   /* Vertically align to the center */
