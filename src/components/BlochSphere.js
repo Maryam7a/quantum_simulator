@@ -4,6 +4,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import "./BlochSphere.css";
 
 const BlochSphere = ({ appliedGates, blochVector }) => {
+  
   const mountRef = useRef(null);
   let sphereGroup; // Group for Bloch sphere + vector
   let targetRotation = { x: 0, y: 0, z: 0 }; // Store the target rotation values
@@ -127,29 +128,6 @@ const BlochSphere = ({ appliedGates, blochVector }) => {
     };
 
     animate();
-
-    // const lastGate = appliedGates[appliedGates.length - 1]; // Get the last gate applied
-    // console.log("🔵Bloch Sphere Last applied gate:", lastGate);
-
-    // applyGateTransformation(lastGate);
-
-    // // ✅ Apply an X-Gate Transformation
-    // const applyXGate = () => {
-    //   sphereGroup.rotation.x += Math.PI; // Rotate the sphere (and vector inside) 180° around X-axis
-    // };
-
-    // // Apply the X-gate transformation once
-    // applyXGate();
-
-    // // Animation loop with smooth rotation
-    // const animate = () => {
-    //   requestAnimationFrame(animate);
-    //   sphereGroup.rotation.x += 0.005; // Sphere and vector rotate together
-    //   controls.update();
-    //   renderer.render(scene, camera);
-    // };
-
-    // animate();
 
     // Cleanup on component unmount
     return () => {

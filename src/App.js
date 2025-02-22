@@ -7,7 +7,7 @@ import { createInitialQuantumState } from "./utils/quantumGates"; // Import func
 import { Button } from "antd";
 import GatesGrid from "./components/GatesGrid";
 import CircuitLine from "./components/CircuitLine"; // Import the separate circuit line component
-import { convertInputToVector } from "./utils/convertInputToVector";
+import { applyGateToVector, convertInputToVector } from "./utils/convertInputToVector";
 
 
 function App() {
@@ -19,7 +19,7 @@ function App() {
   const [appliedGates, setAppliedGates] = useState([]); // Store applied gates
   const [matrixStates, setMatrixStates] = useState([]); // Store transformed matrices
   const [blochVector, setBlochVector] = useState(null);
-
+  const [vectorStates, setVectorStates] = useState([]); // Store transformed vectors
 
   // Handle input changes
   const handleInputChange = (e, key, field) => {
@@ -53,9 +53,9 @@ function App() {
       console.log("✅ Input is valid. Gates enabled. Sum:", sum);
 
       // Compute Bloch Sphere Vector
-      const vector = convertInputToVector(a, b, c, d);
-      console.log("🟢 hmmmm Computed Bloch Sphere Vector:", vector);
-      setBlochVector(vector); // Store in state
+      const initialVector = convertInputToVector(a, b, c, d);
+      console.log("🔵 Initial Vector for Bloch Sphere:", initialVector);
+      setVectorStates([initialVector]); // Store as first vector state
 
       // Store the initial quantum state
       const initialState = createInitialQuantumState(a, b, c, d);
@@ -66,12 +66,16 @@ function App() {
       setButtonsDisabled(true); // Disable gates
       console.log("❌ Invalid input. Gates disabled. Sum:", sum);
       setBlochVector(null); // Remove the vector if input is invalid
+      setVectorStates(null);
     }
   };
 
   // **🟢 Step 2: Receive transformed matrix from GatesGrid**
   const handleMatrixUpdate = (newMatrix, gate) => {
-    console.log("🔵 heree -- Updated Quantum Matrix received in App.js:", newMatrix);
+    console.log(
+      "🔵 heree -- Updated Quantum Matrix received in App.js:",
+      newMatrix
+    );
     console.log("🟢 Gate received in App.js:", gate);
     // Update matrix states list
     setMatrixStates((prevStates) => {
@@ -83,6 +87,19 @@ function App() {
       const updatedGates = [...prevGates, gate];
       console.log("✅ Updated Applied Gates List:", updatedGates);
       return updatedGates;
+    });
+    // Apply gate transformation to the last vector in vectorStates
+    setVectorStates((prevVectors) => {
+      if (prevVectors.length === 0) {
+        console.warn("⚠️ No initial vector found. Skipping transformation.");
+        return prevVectors; // If no vector exists, do nothing
+      }
+
+      const lastVector = prevVectors[prevVectors.length - 1]; // Get last known vector
+      const newVector = applyGateToVector(lastVector, gate); // Apply gate transformation
+      console.log("✅ New Vector after gate:", newVector);
+
+      return [...prevVectors, newVector]; // Store the updated vector
     });
   };
 
@@ -108,7 +125,7 @@ function App() {
           <div className="bloch-container">
             <BlochSphere
               appliedGates={appliedGates}
-              blochVector={blochVector}
+              blochVector={vectorStates[vectorStates.length - 1]}
             />
           </div>
           <BarChartComponent title="Probabilities" />

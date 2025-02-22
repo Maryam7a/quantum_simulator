@@ -1,3 +1,4 @@
+import * as math from "mathjs";
 /**
  * Converts user input (C₀ and C₁ complex numbers) into a Bloch sphere vector.
  * @param {number} a - Real part of C₀
@@ -27,4 +28,32 @@ export const convertInputToVector = (a, b, c, d) => {
   console.log("📍 Converted Input to Bloch Sphere Vector:", { x, y, z });
 
   return { x, y, z };
+};
+
+/**
+ * Apply a quantum gate transformation to a Bloch sphere vector
+ * @param {Object} vector - The current vector (x, y, z)
+ * @param {string} gate - The gate being applied ("X", "Y", "Z")
+ * @returns {Object} - The new transformed vector
+ */
+export const applyGateToVector = (vector, gate) => {
+  let { x, y, z } = vector; // Extract the current vector components
+
+  switch (gate) {
+    case "X":
+      // Applying the X-gate transformation: (x, y, z) -> (x, -y, -z)
+      return { x: x, y: -y, z: -z };
+
+    case "Y":
+      // Applying the Y-gate transformation: (x, y, z) -> (-x, y, -z)
+      return { x: -x, y: y, z: -z };
+
+    case "Z":
+      // Applying the Z-gate transformation: (x, y, z) -> (-x, -y, z)
+      return { x: -x, y: -y, z: z };
+
+    default:
+      console.warn("⚠️ Unknown gate, returning unchanged vector");
+      return vector;
+  }
 };
