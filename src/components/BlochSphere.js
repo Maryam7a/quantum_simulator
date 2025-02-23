@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { addAxisLabels } from "../utils/createAxisLabels"; // ✅ Import the function
 import "./BlochSphere.css";
 
 const BlochSphere = ({ appliedGates, blochVector }) => {
@@ -30,7 +31,7 @@ const BlochSphere = ({ appliedGates, blochVector }) => {
     scene.add(sphereGroup);
 
     // ✅ Create the Bloch sphere inside the group
-    const geometry = new THREE.SphereGeometry(1, 20, 20);
+    const geometry = new THREE.SphereGeometry(5, 20, 20);
     const material = new THREE.MeshBasicMaterial({
       color: 0x505050,
       wireframe: true,
@@ -39,44 +40,13 @@ const BlochSphere = ({ appliedGates, blochVector }) => {
     sphereGroup.add(sphere); // Add sphere to the group
 
     // ✅ Shortened Axes
-    const axesHelper = new THREE.AxesHelper(1.2);
+    const axesHelper = new THREE.AxesHelper(6);
     scene.add(axesHelper);
 
-    // Function to create axis labels
-    const createTextLabel = (text, position) => {
-      const canvas = document.createElement("canvas");
-      const context = canvas.getContext("2d");
-      context.font = "30px Arial";
-      context.fillStyle = "white";
-      context.fillText(text, 10, 50);
-
-      const texture = new THREE.CanvasTexture(canvas);
-      const material = new THREE.SpriteMaterial({ map: texture });
-      const sprite = new THREE.Sprite(material);
-      sprite.scale.set(0.5, 0.25, 1);
-      sprite.position.set(position.x, position.y, position.z);
-      scene.add(sprite);
-    };
-
-    // ✅ Place axis labels & |0⟩ |1⟩ closer
-    createTextLabel("+X", { x: 1.3, y: 0, z: 0 });
-    createTextLabel("-X", { x: -1.3, y: 0, z: 0 });
-    createTextLabel("+Y", { x: 0, y: 1.3, z: 0 });
-    createTextLabel("-Y", { x: 0, y: -1.3, z: 0 });
-    createTextLabel("+Z", { x: 0, y: 0, z: 1.3 });
-    createTextLabel("-Z", { x: 0, y: 0, z: -1.3 });
-
-    createTextLabel("|0⟩", { x: 0, y: 1.1, z: 0 });
-    createTextLabel("|1⟩", { x: 0, y: -1.1, z: 0 });
-
-    // let arrowHelper; // Declare globally
+    // ✅ Add Axis Labels (Single function call!)
+    addAxisLabels(scene); // 🎯 Modularized!
 
     const updateVector = () => {
-      // Remove the old vector if it exists
-      if (arrowHelper) {
-        sphereGroup.remove(arrowHelper);
-      }
-
       if (blochVector) {
         const direction = new THREE.Vector3(
           blochVector.x,
@@ -84,7 +54,7 @@ const BlochSphere = ({ appliedGates, blochVector }) => {
           blochVector.z
         ).normalize();
         const origin = new THREE.Vector3(0, 0, 0);
-        const length = 1;
+        const length = 5.5;
         const color = 0xff0000;
 
         arrowHelper = new THREE.ArrowHelper(direction, origin, length, color);
@@ -100,10 +70,9 @@ const BlochSphere = ({ appliedGates, blochVector }) => {
 
     // Camera position
     camera.position.z = 3;
+    camera.position.set(6, 6, 6);
+    camera.lookAt(0, 0, 0);
 
-    if (appliedGates.length === 0) {
-      console.log("No gates applied yet.");
-    }
     if (appliedGates.length > 0) {
       const lastGate = appliedGates[appliedGates.length - 1]; // Get the last gate applied
       console.log("🔵 Bloch Sphere Last applied gate:", lastGate);
@@ -137,7 +106,7 @@ const BlochSphere = ({ appliedGates, blochVector }) => {
 
   const applyGateTransformation = (gate) => {
     if (!sphereGroup) return; // Ensure the sphere is defined
-
+    console.log("🔵 ---> Target rotation before:", targetRotation.x);
     switch (gate) {
       case "X":
         targetRotation.x += Math.PI; // Set target rotation for X gate
@@ -167,6 +136,5 @@ const BlochSphere = ({ appliedGates, blochVector }) => {
 
   return <div ref={mountRef} />;
 };
-
 
 export default BlochSphere;
