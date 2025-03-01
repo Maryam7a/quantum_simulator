@@ -22,7 +22,7 @@ const BlochSphere = ({ appliedGates, blochVector }) => {
     );
     const renderer = new THREE.WebGLRenderer({ alpha: true });
 
-    renderer.setSize(window.innerWidth * 0.4, window.innerHeight * 0.4);
+    renderer.setSize(window.innerWidth * 0.5, window.innerHeight * 0.5);
     renderer.setClearColor(0x000000, 0);
     mountRef.current.appendChild(renderer.domElement);
 
@@ -31,7 +31,7 @@ const BlochSphere = ({ appliedGates, blochVector }) => {
     scene.add(sphereGroup);
 
     // ✅ Create the Bloch sphere inside the group
-    const geometry = new THREE.SphereGeometry(5, 20, 20);
+    const geometry = new THREE.SphereGeometry(7, 20, 20);
     const material = new THREE.MeshBasicMaterial({
       color: 0x505050,
       wireframe: true,
@@ -70,7 +70,7 @@ const BlochSphere = ({ appliedGates, blochVector }) => {
 
     // Camera position
     camera.position.z = 3;
-    camera.position.set(6, 6, 6);
+    camera.position.set(7, 7, 7);
     camera.lookAt(0, 0, 0);
 
     if (appliedGates.length > 0) {

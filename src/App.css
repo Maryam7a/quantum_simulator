@@ -68,18 +68,18 @@
 .content-container {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   /* Space between sections */
-  align-items: stretch;
+  /* align-items: stretch; */
   /* Stretch items to fit */
   height: calc(100vh - 50px);
   /* Account for tabs and padding */
 }
 
 .bottom-section {
+  /* border: 1px solid #f6f6f6c6; */
   display: flex;
   flex-direction: row;
-  /* Align items in a row */
   justify-content: space-between;
   /* Center-align all items */
   align-items: center;
@@ -90,19 +90,48 @@
   padding: 20px;
   /* Add padding for breathing room */
   box-sizing: border-box;
-  height: auto;
+  height: 80%;
   /* Let height adjust based on content */
 }
 
+.gates-grid-container {
+  flex: 1;
+  /* Takes equal space in row */
+  display: flex;
+  justify-content: flex-start;
+  /* Align to left */
+  align-items: flex-start;
+  /* Align to top */
+  transform: translateY(-100%);
+}
+
+.bloch-container {
+  flex: 1.5;
+  /* Slightly bigger than Gates Grid */
+  display: flex;
+  justify-content: center;
+  /* Center sphere */
+  align-items: center;
+}
+
+.bar-chart-container {
+  flex: 1;
+  /* Same size as Gates Grid */
+  display: flex;
+  justify-content: flex-end;
+  /* Align to right */
+  align-items: center;
+}
+
 .circuit-line-container {
-  border: 1px solid #0bbe11;
+  /* border: 1px solid #0bbe11; */
   margin-top: 5px;
   /* Reduce space above Circuit Line */
 }
 
 /* Centering the button container */
 .validate-button-container {
-  border: 1px solid #c51ec2;
+  /* border: 1px solid #c51ec2; */
   display: flex;
   align-items: center;
 }

@@ -112,23 +112,32 @@ function App() {
           c1={c1}
           c2={c2}
           handleInputChange={handleInputChange}
-          handleValidateInput={handleValidateInput} // Pass function as a prop
+          handleValidateInput={handleValidateInput}
         />
-        {/* Gates Grid */}
-        <GatesGrid
-          buttonsDisabled={buttonsDisabled}
-          initialQuantumState={matrixStates[matrixStates.length - 1]}
-          onMatrixUpdate={handleMatrixUpdate}
-        />
-        {/* Bottom Section: Graphs & Bloch Sphere */}
+
+        {/* Bottom Section: Gates, Bloch Sphere & Probability Graph */}
         <div className="bottom-section">
+          {/* Gates Grid (Left) */}
+          <div className="gates-grid-container">
+            <GatesGrid
+              buttonsDisabled={buttonsDisabled}
+              initialQuantumState={matrixStates[matrixStates.length - 1]}
+              onMatrixUpdate={handleMatrixUpdate}
+            />
+          </div>
+
+          {/* Bloch Sphere (Center) */}
           <div className="bloch-container">
             <BlochSphere
               appliedGates={appliedGates}
               blochVector={vectorStates[vectorStates.length - 1]}
             />
           </div>
-          <BarChartComponent title="Probabilities" />
+
+          {/* Probability Graph (Right) */}
+          <div className="bar-chart-container">
+            <BarChartComponent title="Probabilities" />
+          </div>
         </div>
       </div>
     </div>

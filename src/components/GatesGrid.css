@@ -1,38 +1,53 @@
+.gate-button {
+    background: linear-gradient(to bottom, #C1C1C1, #5B5B5B);
+    /* Light to Dark Gradient */
+    border: 1px solid #888;
+    /* Subtle border */
+    color: rgb(0, 0, 0);
+    /* Text color */
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    margin: 5px;
+    width: 50px;
+    /* Adjust to match the design */
+    height: 50px;
+    text-align: center;
+    border-radius: 5px;
+    /* Slightly rounded corners */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    /* Soft shadow */
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.gate-button:hover {
+    background: linear-gradient(to bottom, #ffffff, #777);
+    color: #0a07a2;
+    /* Lighter gradient on hover */
+    transform: scale(1.05);
+    /* Slight pop effect */
+}
+
+.gate-button:active {
+    background: linear-gradient(to bottom, #ccc, #444);
+    /* Pressed effect */
+    transform: scale(0.98);
+}
+
 .gates-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     /* 3 columns */
-    grid-template-rows: repeat(2, 1fr);
-    /* 2 rows */
     gap: 10px;
-    width: 150px;
-    /* Reduce width */
-    margin-left: 0;
-    /* Align to the left */
-    position: absolute;
-    /* Make it fixed to the left */
-    left: 20px;
-    /* Adjust for spacing */
-    top: 50%;
-    /* Center vertically */
-    transform: translateY(-50%);
-    /* Ensure proper centering */
-}
-
-.gate-button {
-    background-color: #1e27cd;
-    border: 1px solid #666;
-    border-radius: 5px;
-    text-align: center;
+    /* Space between buttons */
+    justify-content: center;
+    align-items: center;
     padding: 10px;
-    font-size: 16px;
-    font-weight: bold;
-    color: white;
-    cursor: pointer;
 }
 
 .gate-button.disabled {
     background-color: #5d5d65;
-    color: #bbb;
+    color: #000000;
     cursor: not-allowed;
 }
