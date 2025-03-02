@@ -4,7 +4,7 @@ import MatrixDisplay from "./matrixDisplay";
 import QuantumMatrix from "./quantummatrix"; // Import QuantumMatrix
 
 const CircuitLine = ({ appliedGates, matrixStates, onUndo, c1, c2, handleInputChange, handleValidateInput }) => {
-  console.log("Circuit Line Props:", appliedGates, matrixStates);
+  // console.log("Circuit Line Props:", appliedGates, matrixStates);
   return (
     <div className="circuit-line-container">
       {/* Left Side: Qubit Label + Input Quantum Matrix */}

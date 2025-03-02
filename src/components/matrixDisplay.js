@@ -3,15 +3,15 @@ import { Table } from "antd";
 import "./quantummatrix.css"; // Reuse same styles for consistency
 
 const MatrixDisplay = ({ matrixState }) => {
-  console.log("🔵 Received Matrix State in MatrixDisplay:", matrixState);
-  console.log("whyyyyyyy");
-  console.log("ajeeb, matrixState[0][0].re", matrixState._data[0][0].re);
-  console.log("ajeeb, matrixState[0][0].im", matrixState._data[0][0].im);
+  // console.log("🔵 Received Matrix State in MatrixDisplay:", matrixState);
+  // console.log("whyyyyyyy");
+  // console.log("ajeeb, matrixState[0][0].re", matrixState._data[0][0].re);
+  // console.log("ajeeb, matrixState[0][0].im", matrixState._data[0][0].im);
 
-    console.log(
-      "wth, matrixState._data[1][0].re",
-      matrixState._data[1][0].re
-    );
+    // console.log(
+    //   "wth, matrixState._data[1][0].re",
+    //   matrixState._data[1][0].re
+    // );
   // Ensure matrixState is valid before rendering
   if (!matrixState || !matrixState._data) {
     console.warn(
