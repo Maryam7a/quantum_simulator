@@ -6,15 +6,20 @@ const GatesGrid = ({
   buttonsDisabled,
   initialQuantumState,
   onMatrixUpdate,
+  onUndo, // ✅ Added missing prop
+  appliedGates, // ✅ Fixed Issue 2
 }) => {
-  const gateNames = ["X", "Y", "Z", "H", "I", "M"];
+  const gateNames = ["X", "Y", "Z", "Undo", "I", "M"];
 
   const handleGateClick = (gate) => {
-    console.log("handle Gate click in gatesgrid.js");
-    console.log("what does it receive from app.js ", initialQuantumState);
     if (buttonsDisabled) return; // Prevent clicking if gates are disabled
+
+    if (gate === "Undo") {
+      console.log("🟡 Undo button clicked!");
+      onUndo(); // Call the undo function from App.js
+      return;
+    }
     console.log(`🟢 Gate ${gate} clicked in GatesGrid`);
-    console.log("what does it send to applyGate lol ", initialQuantumState);
 
     // Apply the matrix transformation
     const newMatrix = applyGate(initialQuantumState, gate);
@@ -29,9 +34,15 @@ const GatesGrid = ({
       {gateNames.map((gate) => (
         <button
           key={gate}
-          className={`gate-button ${buttonsDisabled ? "disabled" : ""}`}
+          className={`gate-button ${
+            (gate === "Undo" && appliedGates.length === 0) || buttonsDisabled
+              ? "disabled"
+              : ""
+          }`}
           onClick={() => handleGateClick(gate)}
-          disabled={buttonsDisabled}
+          disabled={
+            gate === "Undo" ? appliedGates.length === 0 : buttonsDisabled
+          }
         >
           {gate}
         </button>

@@ -4,7 +4,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { addAxisLabels } from "../utils/createAxisLabels"; // ✅ Import the function
 import "./BlochSphere.css";
 
-const BlochSphere = ({ appliedGates, blochVector }) => {
+const BlochSphere = ({ appliedGates, blochVector, vectorStates }) => {
   
   const mountRef = useRef(null);
   let sphereGroup; // Group for Bloch sphere + vector
@@ -78,6 +78,27 @@ const BlochSphere = ({ appliedGates, blochVector }) => {
     camera.position.set(7, 7, 7);
     camera.lookAt(0, 0, 0);
 
+    // if (blochVector) {
+    //   console.log("🔄 Resetting Bloch Sphere to Last Vector:", blochVector);
+
+    //   // Clear previous vector before adding new one
+    //   if (arrowHelper) sphereGroup.remove(arrowHelper);
+
+    //   const direction = new THREE.Vector3(
+    //     blochVector.x,
+    //     blochVector.y,
+    //     blochVector.z
+    //   ).normalize();
+
+    //   arrowHelper = new THREE.ArrowHelper(
+    //     direction,
+    //     new THREE.Vector3(0, 0, 0),
+    //     5.5,
+    //     0xff0000
+    //   );
+    //   sphereGroup.add(arrowHelper);
+    // }
+
     if (appliedGates.length > 0) {
       const lastGate = appliedGates[appliedGates.length - 1]; // Get the last gate applied
       console.log("🔵 Bloch Sphere Last applied gate:", lastGate);
@@ -107,7 +128,7 @@ const BlochSphere = ({ appliedGates, blochVector }) => {
     return () => {
       mountRef.current.removeChild(renderer.domElement);
     };
-  }, [appliedGates, blochVector]); // Now updates whenever `blochVector` changes
+  }, [appliedGates, blochVector, vectorStates]); // Now updates whenever `blochVector` changes
 
   const applyGateTransformation = (gate) => {
     if (!sphereGroup) return; // Ensure the sphere is defined

@@ -108,6 +108,47 @@ function App() {
     });
   };
 
+  const handleUndo = () => {
+    if (appliedGates.length === 0) {
+      console.warn("⚠️ No gate to undo.");
+      return;
+    }
+
+    console.log("🔄 Undoing last gate:", appliedGates[appliedGates.length - 1]);
+
+    // Remove last applied gate
+    setAppliedGates((prevGates) => {
+      const updatedGates = prevGates.slice(0, -1);
+      console.log("✅ Updated Applied Gates List:", updatedGates);
+      return updatedGates;
+    });
+
+    // Remove last matrix state
+    setMatrixStates((prevMatrices) => {
+      if (prevMatrices.length > 1) {
+        const updatedMatrices = prevMatrices.slice(0, -1);
+        console.log("✅ Updated Matrix States List:", updatedMatrices);
+        return updatedMatrices;
+      }
+      return prevMatrices;
+    });
+
+    // Remove last vector state (for Bloch sphere)
+    setVectorStates((prevVectors) => {
+      if (prevVectors.length > 1) {
+        const updatedVectors = prevVectors.slice(0, -1);
+        console.log("✅ Updated Bloch Sphere Vectors:", updatedVectors);
+        return updatedVectors;
+      }
+      return prevVectors;
+    });
+    console.log("🚀 Final State After Undo:");
+    console.log("  - Applied Gates:", appliedGates);
+    console.log("  - Matrix States:", matrixStates);
+    console.log("  - Bloch Sphere Vectors:", vectorStates);
+  };
+
+
   return (
     <div className="app-container">
       <div className="content-container">
@@ -128,6 +169,8 @@ function App() {
               buttonsDisabled={buttonsDisabled}
               initialQuantumState={matrixStates[matrixStates.length - 1]}
               onMatrixUpdate={handleMatrixUpdate}
+              onUndo={handleUndo}
+              appliedGates={appliedGates}
             />
           </div>
 
@@ -136,6 +179,7 @@ function App() {
             <BlochSphere
               appliedGates={appliedGates}
               blochVector={vectorStates[vectorStates.length - 1]}
+              vectorStates={vectorStates}
             />
           </div>
 
