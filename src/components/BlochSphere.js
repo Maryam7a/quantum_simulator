@@ -12,6 +12,11 @@ const BlochSphere = ({ appliedGates, blochVector }) => {
   let arrowHelper = null; // Declare globally
 
   useEffect(() => {
+
+    console.log("✅ Current Applied Gates:", appliedGates);
+    console.log("✅ Current Bloch Vector:", blochVector);
+    console.log("✅ Current Sphere Rotation: ", targetRotation);
+
     // Scene setup
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
@@ -106,7 +111,20 @@ const BlochSphere = ({ appliedGates, blochVector }) => {
 
   const applyGateTransformation = (gate) => {
     if (!sphereGroup) return; // Ensure the sphere is defined
-    console.log("🔵 ---> Target rotation before:", targetRotation.x);
+    
+    console.log(
+      "🔵 ---> Target rotation before:",
+      targetRotation.x,
+      targetRotation.y,
+      targetRotation.z
+    );
+
+    // Prevent the first gate from applying twice
+    if (appliedGates.length === 1) {
+      console.log("⚠️ First gate detected, ensuring only one transformation.");
+      return;
+    }
+
     switch (gate) {
       case "X":
         targetRotation.x += Math.PI; // Set target rotation for X gate
@@ -132,6 +150,7 @@ const BlochSphere = ({ appliedGates, blochVector }) => {
       default:
         console.log("⚠️ No transformation defined for this gate.");
     }
+    console.log("✅ Updated Target Rotation:", targetRotation);
   };
 
   return <div ref={mountRef} />;

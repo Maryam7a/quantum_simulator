@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import BarChartComponent from "./components/BarChartComponent";
 import "./App.css";
 import BlochSphere from "./components/BlochSphere";
-import QuantumMatrix from "./components/quantummatrix";
 import { createInitialQuantumState } from "./utils/quantumGates"; // Import function to generate state
-import { Button } from "antd";
 import GatesGrid from "./components/GatesGrid";
 import CircuitLine from "./components/CircuitLine"; // Import the separate circuit line component
 import { applyGateToVector, convertInputToVector } from "./utils/convertInputToVector";
@@ -88,11 +86,18 @@ function App() {
       console.log("✅ Updated Applied Gates List:", updatedGates);
       return updatedGates;
     });
+
     // Apply gate transformation to the last vector in vectorStates
     setVectorStates((prevVectors) => {
       if (prevVectors.length === 0) {
         console.warn("⚠️ No initial vector found. Skipping transformation.");
         return prevVectors; // If no vector exists, do nothing
+      }
+
+      // Prevent the first gate from applying transformation twice
+      if (appliedGates.length === 1) {
+        console.log("⚠️ First gate detected, skipping extra transformation.");
+        return prevVectors;
       }
 
       const lastVector = prevVectors[prevVectors.length - 1]; // Get last known vector
