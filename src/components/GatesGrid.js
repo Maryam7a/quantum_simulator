@@ -8,6 +8,7 @@ const GatesGrid = ({
   onMatrixUpdate,
   onUndo, // ✅ Added missing prop
   appliedGates, // ✅ Fixed Issue 2
+  onMeasure,
 }) => {
   const gateNames = ["X", "Y", "Z", "Undo", "I", "M"];
 
@@ -19,6 +20,13 @@ const GatesGrid = ({
       onUndo(); // Call the undo function from App.js
       return;
     }
+
+    if (gate === "M") {
+      console.log("🔬 Measurement Gate clicked!");
+      onMeasure(); // ✅ Call handleMeasurement() from App.js
+      return;
+    }
+
     console.log(`🟢 Gate ${gate} clicked in GatesGrid`);
 
     // Apply the matrix transformation

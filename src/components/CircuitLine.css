@@ -1,25 +1,29 @@
 /* entire container */
 .circuit-line-container {
-    /* border: 1px solid #1e2fc5; */
-    /* color: rgb(223, 36, 148); */
+    border-color: #1bdb09;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 25%;
+    height: 20%;
     position: relative;
+    margin-top: 10px;
+    /* Adjust top spacing */
 }
 
 /* Qubit label (|q₀⟩) styling */
 .qubit-label {
+    border-color: #1bdb09;
     padding-top: 37%;
-    font-size: 1.0rem;
+    font-size: 1.5rem;
     color: rgb(188, 177, 177);
-    font-weight: normal;
+    font-weight: bold;
 }
 
 /* weird inside container with gates and matrices*/
 .circuit-line {
+    color: #1bdb09;
+    border-color: #1bdb09;
     position: relative;
     height: 100%;
     width: 80%;
@@ -52,27 +56,39 @@
 
 /* Gates dropped onto the circuit */
 .dropped-gate {
-    margin-left: 100px;
-    margin-right: 40px;
-    margin-bottom: 5px;
-    margin-top: 30px;
-    background-color: #acacbe;
-    /* border: 2px solid #120fcd; */
-    border-radius: 5px;
-    padding: 5px 10px;
+    background: linear-gradient(to bottom, #C1C1C1, #5B5B5B);
+    /* Light to Dark Gradient */
+    border: 1px solid #888;
+    /* Subtle border */
     color: rgb(0, 0, 0);
+    /* Text color */
+    font-size: 16px;
     font-weight: bold;
+    padding: 10px 20px;
+    /* margin: 0px; */
+    /* width: 20px; */
+    /* Adjust to match the design */
+    /* height: 20px; */
+    text-align: center;
+    border-radius: 5px;
+    /* Slightly rounded corners */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    /* Soft shadow */
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
     cursor: default;
     z-index: 2;
 }
 
 /* Ensure gates & matrices align properly */
 .gate-matrix-container {
+    /* background-color: pink; */
+    border-color: rgb(44, 219, 59);
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    margin: 0 15px;
+    margin: 0 20px;
 }
 
 .matrix-container{

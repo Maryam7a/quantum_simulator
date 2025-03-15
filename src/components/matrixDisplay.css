@@ -14,14 +14,23 @@
 .ant-table-tbody>tr>td {
     background: transparent !important;
     border: none !important;
-    /* color: rgb(255, 255, 255) !important; */
-    /* padding: 0px !important; */
-    line-height: 1.3 !important;
+    color: white !important;
+    padding: 0px !important;
+    font-size: 1.5rem !important;
+    line-height: 1.8 !important;
+    text-align: center !important;
+        /* Center align text */
+        /* display: flex; */
+        justify-content: center;
+        /* Ensures number stays between grey labels */
+        align-items: center;
+        /* Vertically centers text */
 }
 
 /* Reduce spacing inside input fields */
 .ant-input {
-    padding: 0px !important; /* alters the height between the two rows */
+    padding: 0px !important;
+    /* alters the height between the two rows */
     text-align: center !important;
 }
 
@@ -29,16 +38,15 @@
 .matrix-wrapper {
     color: turquoise;
     display: flex;
-    /* align-items: center; */
-    /* justify-content: center; */
+    align-items: center;
 }
 
 .matrix-bracket {
-    font-size: 1.5rem;
-    color: rgb(82, 88, 118);
-    font-weight: light;
+    font-size: 2rem;
+    color: rgb(54, 54, 54);
+    font-weight: lighter;
     /* position: relative; */
-    /* top:6px; */
+    /* top: 6px; */
     /* margin: 1 px; */
 }
 

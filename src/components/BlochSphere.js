@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { addAxisLabels } from "../utils/createAxisLabels"; // ✅ Import the function
+import { addAxisLabels } from "../utils/createAxisLabels";
 import "./BlochSphere.css";
 
 const BlochSphere = ({ appliedGates, blochVector, vectorStates }) => {
@@ -20,14 +20,14 @@ const BlochSphere = ({ appliedGates, blochVector, vectorStates }) => {
     // Scene setup
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
-      75,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000
+      100, // Field of view (FOV) - controls height
+      window.innerWidth / window.innerHeight, // Aspect ratio - controls width
+      0.1, // Near clipping plane
+      1000 // Far clipping plane
     );
     const renderer = new THREE.WebGLRenderer({ alpha: true });
 
-    renderer.setSize(window.innerWidth * 0.5, window.innerHeight * 0.5);
+    renderer.setSize(window.innerWidth * 0.75, window.innerHeight * 0.75);
     renderer.setClearColor(0x000000, 0);
     mountRef.current.appendChild(renderer.domElement);
 
@@ -36,7 +36,7 @@ const BlochSphere = ({ appliedGates, blochVector, vectorStates }) => {
     scene.add(sphereGroup);
 
     // ✅ Create the Bloch sphere inside the group
-    const geometry = new THREE.SphereGeometry(7, 20, 20);
+    const geometry = new THREE.SphereGeometry(6.5, 15, 15);
     const material = new THREE.MeshBasicMaterial({
       color: 0x505050,
       wireframe: true,
@@ -45,7 +45,7 @@ const BlochSphere = ({ appliedGates, blochVector, vectorStates }) => {
     sphereGroup.add(sphere); // Add sphere to the group
 
     // ✅ Shortened Axes
-    const axesHelper = new THREE.AxesHelper(6);
+    const axesHelper = new THREE.AxesHelper(6.8);;
     scene.add(axesHelper);
 
     // ✅ Add Axis Labels (Single function call!)
@@ -75,7 +75,7 @@ const BlochSphere = ({ appliedGates, blochVector, vectorStates }) => {
 
     // Camera position
     camera.position.z = 3;
-    camera.position.set(7, 7, 7);
+    camera.position.set(6,6,6);
     camera.lookAt(0, 0, 0);
 
     // if (blochVector) {

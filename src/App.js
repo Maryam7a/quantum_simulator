@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import BarChartComponent from "./components/BarChartComponent";
 import "./App.css";
 import BlochSphere from "./components/BlochSphere";
-import { createInitialQuantumState } from "./utils/quantumGates"; // Import function to generate state
+import { createInitialQuantumState, measureQuantumState } from "./utils/quantumGates"; // Import function to generate state
 import GatesGrid from "./components/GatesGrid";
 import CircuitLine from "./components/CircuitLine"; // Import the separate circuit line component
 import { applyGateToVector, convertInputToVector } from "./utils/convertInputToVector";
-
+import nustLogo from "./images/Nust-logo.jpg"; // ✅ Correct import
 
 function App() {
   const [c1, setC1] = useState({ a: "", b: "" });
@@ -18,6 +18,7 @@ function App() {
   const [matrixStates, setMatrixStates] = useState([]); // Store transformed matrices
   const [blochVector, setBlochVector] = useState(null);
   const [vectorStates, setVectorStates] = useState([]); // Store transformed vectors
+  const [probabilityData, setProbabilityData] = useState({ P0: 0, P1: 0 });
 
   // Handle input changes
   const handleInputChange = (e, key, field) => {
@@ -28,6 +29,36 @@ function App() {
       setC2({ ...c2, [field === "real" ? "c" : "d"]: value });
     }
   };
+
+  const handleMeasurement = () => {
+    if (!matrixStates.length) {
+      console.error("❌ No quantum state to measure.");
+      return;
+    }
+
+    // Get the last quantum state
+    const latestState = matrixStates[matrixStates.length - 1];
+
+    // Perform measurement
+    const { measuredState, probabilities } = measureQuantumState(latestState);
+
+    console.log("🎯 Measurement Result:", measuredState);
+    console.log("📊 Updating Probability Graph:", probabilities);
+
+    // Update the probability graph
+    setProbabilityData(probabilities);
+
+    // Update the Bloch Sphere vector
+    setVectorStates([
+      measuredState === "|0⟩"
+        ? { x: 0, y: 0, z: 1 } // Collapse to +Z axis
+        : { x: 0, y: 0, z: -1 }, // Collapse to -Z axis
+    ]);
+
+    // Disable further gate applications
+    setButtonsDisabled(true);
+  };
+
 
   const handleShotsChange = (e) => {
     setShots(e.target.value);
@@ -148,10 +179,16 @@ function App() {
     console.log("  - Bloch Sphere Vectors:", vectorStates);
   };
 
-
   return (
     <div className="app-container">
+      <div className="header">
+        <img src={nustLogo} alt="NUST Logo" className="nust-logo" />
+        <h1 className="project-title">Quantum Circuit Simulator</h1>
+      </div>
       <div className="content-container">
+        {/* <div
+          className="App-logo">
+        </div> */}
         <CircuitLine
           appliedGates={appliedGates}
           matrixStates={matrixStates}
@@ -171,6 +208,7 @@ function App() {
               onMatrixUpdate={handleMatrixUpdate}
               onUndo={handleUndo}
               appliedGates={appliedGates}
+              onMeasure={handleMeasurement} // ✅ Added measurement function!
             />
           </div>
 
@@ -185,7 +223,10 @@ function App() {
 
           {/* Probability Graph (Right) */}
           <div className="bar-chart-container">
-            <BarChartComponent title="Probabilities" />
+            <BarChartComponent
+              title="Probability Distribution"
+              data={probabilityData}
+            />
           </div>
         </div>
       </div>

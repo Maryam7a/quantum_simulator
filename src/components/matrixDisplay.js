@@ -1,6 +1,6 @@
 import React from "react";
 import { Table } from "antd";
-import "./quantummatrix.css"; // Reuse same styles for consistency
+import "./matrixDisplay.css"; // Reuse same styles for consistency
 
 const MatrixDisplay = ({ matrixState }) => {
   // console.log("🔵 Received Matrix State in MatrixDisplay:", matrixState);

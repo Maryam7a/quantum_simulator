@@ -10,7 +10,6 @@
     padding: 10px 20px;
     margin: 5px;
     width: 50px;
-    /* Adjust to match the design */
     height: 50px;
     text-align: center;
     border-radius: 5px;
@@ -19,6 +18,10 @@
     /* Soft shadow */
     cursor: pointer;
     transition: all 0.2s ease-in-out;
+    /* background: red !important; */
+        /* Change button color */
+        /* z-index: 10 !important; */
+        /* Bring buttons to the top */
 }
 
 .gate-button:hover {
@@ -38,12 +41,15 @@
 .gates-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    /* 3 columns */
     gap: 10px;
     /* Space between buttons */
     justify-content: center;
     align-items: center;
     padding: 10px;
+    z-index: 4;
+        /* Lift it above other elements */
+    /* position: relative; */
+    /* width: 100%; */
 }
 
 .gate-button.disabled {

@@ -92,3 +92,36 @@ export const applyGate = (state, gateName) => {
       return state;
   }
 };
+
+export const measureQuantumState = (state) => {
+  if (!state || state.size()[0] !== 2) {
+    console.error("❌ Invalid quantum state for measurement.");
+    return { measuredState: null, probabilities: { P0: 0, P1: 0 } };
+  }
+
+  // Extract real & imaginary parts of C0 and C1
+  const C0 = state.get([0, 0]); // First element
+  const C1 = state.get([1, 0]); // Second element
+
+  // Compute probabilities: P(|0⟩) = |C0|², P(|1⟩) = |C1|²
+  const prob0 = Math.pow(C0.re, 2) + Math.pow(C0.im, 2);
+  const prob1 = Math.pow(C1.re, 2) + Math.pow(C1.im, 2);
+
+  // Generate a random number to decide the measurement outcome
+  const randomValue = Math.random();
+  const measuredState = randomValue < prob0 ? "|0⟩" : "|1⟩";
+
+  console.log("🔬 Measurement performed!");
+  console.log(
+    `📊 Probabilities: P(|0⟩) = ${prob0.toFixed(2)}, P(|1⟩) = ${prob1.toFixed(
+      2
+    )}`
+  );
+  console.log(`🎯 Collapsed to state: ${measuredState}`);
+
+  return {
+    measuredState,
+    probabilities: { P0: prob0, P1: prob1 },
+  };
+};
+

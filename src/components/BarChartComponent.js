@@ -11,19 +11,13 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const sampleData = [
-  { name: "Qubit A", value: 30 },
-  { name: "Qubit B", value: 50 },
-  { name: "Qubit C", value: 80 },
-];
-
 const BarChartComponent = ({ data, title }) => {
   // Ensure default values (prevent disappearance)
-  const probabilities = data || { P0: 0, P1: 0 };
+  const probabilities = data ? data : { P0: 0, P1: 0 };
   return (
     <div style={{ width: "80%", padding: "5px" }}>
       <h3 style={{ textAlign: "center" }}>{title}</h3>
-      <ResponsiveContainer width="80%" height={300}>
+      <ResponsiveContainer width="80%" height={500}>
         <BarChart
           data={[
             { name: "|0⟩", value: probabilities.P0 },
@@ -32,10 +26,10 @@ const BarChartComponent = ({ data, title }) => {
           margin={{ top: 20, right: 0, left: 0, bottom: 5 }}
         >
           <XAxis dataKey="name" />
-          <YAxis />
+          <YAxis/>
           <Tooltip />
-          <Legend />
-          <Bar dataKey="value" fill="#0589E9" barSize={60} barGap={1} />
+          {/* <Legend /> */}
+          <Bar dataKey="value" fill="#ccd" barSize={60} barGap={1} />
         </BarChart>
       </ResponsiveContainer>
     </div>
