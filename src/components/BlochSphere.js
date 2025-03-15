@@ -54,9 +54,9 @@ const BlochSphere = ({ appliedGates, blochVector, vectorStates }) => {
     const updateVector = () => {
       if (blochVector) {
         const direction = new THREE.Vector3(
-          blochVector.x,
           blochVector.y,
-          blochVector.z
+          blochVector.z,
+          blochVector.x
         ).normalize();
         const origin = new THREE.Vector3(0, 0, 0);
         const length = 5.5;
