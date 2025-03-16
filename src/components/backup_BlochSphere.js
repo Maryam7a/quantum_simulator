@@ -5,12 +5,14 @@ import { addAxisLabels } from "../utils/createAxisLabels";
 import "./BlochSphere.css";
 
 const BlochSphere = ({ appliedGates, blochVector, vectorStates }) => {
+  
   const mountRef = useRef(null);
   let sphereGroup; // Group for Bloch sphere + vector
   let targetRotation = { x: 0, y: 0, z: 0 }; // Store the target rotation values
   let arrowHelper = null; // Declare globally
 
   useEffect(() => {
+
     console.log("✅ Current Applied Gates:", appliedGates);
     console.log("✅ Current Bloch Vector:", blochVector);
     console.log("✅ Current Sphere Rotation: ", targetRotation);
@@ -43,14 +45,15 @@ const BlochSphere = ({ appliedGates, blochVector, vectorStates }) => {
     sphereGroup.add(sphere); // Add sphere to the group
 
     // ✅ Shortened Axes
-    const axesHelper = new THREE.AxesHelper(6.8);
+    const axesHelper = new THREE.AxesHelper(6.8);;
     scene.add(axesHelper);
 
     // ✅ Add Axis Labels (Single function call!)
     addAxisLabels(scene); // 🎯 Modularized!
 
+    
+
     const updateVector = () => {
-      console.log("---->> when is this called <<----- ", blochVector);
       if (blochVector) {
         const direction = new THREE.Vector3(
           blochVector.y,
@@ -58,7 +61,7 @@ const BlochSphere = ({ appliedGates, blochVector, vectorStates }) => {
           blochVector.x
         ).normalize();
         const origin = new THREE.Vector3(0, 0, 0);
-        const length = 6;
+        const length = 5.5;
         const color = 0xff0000;
 
         arrowHelper = new THREE.ArrowHelper(direction, origin, length, color);
@@ -74,12 +77,50 @@ const BlochSphere = ({ appliedGates, blochVector, vectorStates }) => {
 
     // Camera position
     camera.position.z = 3;
-    camera.position.set(6, 6, 6);
+    camera.position.set(6,6,6);
     camera.lookAt(0, 0, 0);
+
+    // if (blochVector) {
+    //   console.log("🔄 Resetting Bloch Sphere to Last Vector:", blochVector);
+
+    //   // Clear previous vector before adding new one
+    //   if (arrowHelper) sphereGroup.remove(arrowHelper);
+
+    //   const direction = new THREE.Vector3(
+    //     blochVector.x,
+    //     blochVector.y,
+    //     blochVector.z
+    //   ).normalize();
+
+    //   arrowHelper = new THREE.ArrowHelper(
+    //     direction,
+    //     new THREE.Vector3(0, 0, 0),
+    //     5.5,
+    //     0xff0000
+    //   );
+    //   sphereGroup.add(arrowHelper);
+    // }
+
+    if (appliedGates.length > 0) {
+      const lastGate = appliedGates[appliedGates.length - 1]; // Get the last gate applied
+      console.log("🔵 Bloch Sphere Last applied gate:", lastGate);
+      applyGateTransformation(lastGate);
+    }
 
     // Animation loop (we will handle rotation smoothly later)
     const animate = () => {
       requestAnimationFrame(animate);
+
+      // Smoothly interpolate rotation toward target values
+      const lerpFactor = 0.01; // Adjust this for slower or faster transitions
+      sphereGroup.rotation.x +=
+        (targetRotation.x - sphereGroup.rotation.x) * lerpFactor;
+      sphereGroup.rotation.y +=
+        (targetRotation.y - sphereGroup.rotation.y) * lerpFactor;
+      sphereGroup.rotation.z +=
+        (targetRotation.z - sphereGroup.rotation.z) * lerpFactor;
+
+      controls.update();
       renderer.render(scene, camera);
     };
 
@@ -90,6 +131,50 @@ const BlochSphere = ({ appliedGates, blochVector, vectorStates }) => {
       mountRef.current.removeChild(renderer.domElement);
     };
   }, [appliedGates, blochVector, vectorStates]); // Now updates whenever `blochVector` changes
+
+  const applyGateTransformation = (gate) => {
+    if (!sphereGroup) return; // Ensure the sphere is defined
+    
+    console.log(
+      "🔵 ---> Target rotation before:",
+      targetRotation.x,
+      targetRotation.y,
+      targetRotation.z
+    );
+
+    // Prevent the first gate from applying twice
+    if (appliedGates.length === 1) {
+      console.log("⚠️ First gate detected, ensuring only one transformation.");
+      return;
+    }
+
+    switch (gate) {
+      case "X":
+        targetRotation.x += Math.PI; // Set target rotation for X gate
+        console.log(
+          "🔄 X Gate Applied: Target X rotation set to",
+          targetRotation.x
+        );
+        break;
+      case "Y":
+        targetRotation.y += Math.PI; // Set target rotation for Y gate
+        console.log(
+          "🔄 Y Gate Applied: Target Y rotation set to",
+          targetRotation.y
+        );
+        break;
+      case "Z":
+        targetRotation.z += Math.PI; // Set target rotation for Z gate
+        console.log(
+          "🔄 Z Gate Applied: Target Z rotation set to",
+          targetRotation.z
+        );
+        break;
+      default:
+        console.log("⚠️ No transformation defined for this gate.");
+    }
+    console.log("✅ Updated Target Rotation:", targetRotation);
+  };
 
   return <div ref={mountRef} />;
 };

@@ -126,10 +126,10 @@ function App() {
       }
 
       // Prevent the first gate from applying transformation twice
-      if (appliedGates.length === 1) {
-        console.log("⚠️ First gate detected, skipping extra transformation.");
-        return prevVectors;
-      }
+      // if (appliedGates.length === 1) {
+      //   console.log("⚠️ First gate detected, skipping extra transformation.");
+      //   return prevVectors;
+      // }
 
       const lastVector = prevVectors[prevVectors.length - 1]; // Get last known vector
       const newVector = applyGateToVector(lastVector, gate); // Apply gate transformation
