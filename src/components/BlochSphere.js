@@ -7,6 +7,7 @@ import "./BlochSphere.css";
 const BlochSphere = ({
   appliedGates,
   blochVector,
+  prevBlochVector,
   vectorStates,
   isGateApplied,
   setIsGateApplied,
@@ -74,7 +75,21 @@ const BlochSphere = ({
     // ✅ Function to animate gate transformations
     const animateGateTransformation = (gate) => {
       console.log("🟠 Animating Gate Transformation!");
+      // see what previous existing vector was and just add that
+      if (prevBlochVector) {
+        const direction = new THREE.Vector3(
+          prevBlochVector.y,
+          prevBlochVector.z,
+          prevBlochVector.x
+        ).normalize();
+        const origin = new THREE.Vector3(0, 0, 0);
+        const length = 6;
+        const color = 0xff0000;
 
+        arrowHelper = new THREE.ArrowHelper(direction, origin, length, color);
+        sphereGroup.add(arrowHelper);
+      }
+      
       // Determine target rotation (180° rotation per gate)
       switch (gate) {
         case "X":
@@ -94,7 +109,7 @@ const BlochSphere = ({
       let animationFrame;
       const animate = () => {
         // Smooth interpolation using lerp
-        const lerpFactor = 0.005; // Adjust for smoother/faster rotation
+        const lerpFactor = 0.01; // Adjust for smoother/faster rotation
 
         sphereGroup.rotation.x +=
           (targetRotation.x - sphereGroup.rotation.x) * lerpFactor;
@@ -133,8 +148,6 @@ const BlochSphere = ({
       }
     }
 
-    // ✅ Do NOT set `isGateApplied(false)` inside `useEffect()` anymore!
-
     // Add OrbitControls
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
@@ -143,12 +156,12 @@ const BlochSphere = ({
     camera.position.set(6, 6, 6);
     camera.lookAt(0, 0, 0);
 
-    const renderLoop = () => {
-      requestAnimationFrame(renderLoop);
+    const animate = () => {
+      requestAnimationFrame(animate);
       renderer.render(scene, camera);
     };
 
-    renderLoop();
+    animate();
 
     return () => {
       mountRef.current.removeChild(renderer.domElement);

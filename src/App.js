@@ -223,6 +223,7 @@ function App() {
             <BlochSphere
               appliedGates={appliedGates}
               blochVector={vectorStates[vectorStates.length - 1]}
+              prevBlochVector={vectorStates[vectorStates.length - 2]}
               vectorStates={vectorStates}
               isGateApplied={isGateApplied}
               setIsGateApplied={setIsGateApplied}

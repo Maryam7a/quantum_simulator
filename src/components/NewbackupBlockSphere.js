@@ -4,24 +4,30 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { addAxisLabels } from "../utils/createAxisLabels";
 import "./BlochSphere.css";
 
-const BlochSphere = ({ appliedGates, blochVector, vectorStates, isGateApplied, setIsGateApplied }) => {
+const BlochSphere = ({
+  appliedGates,
+  blochVector,
+  prevBlochVector,
+  vectorStates,
+  isGateApplied,
+  setIsGateApplied,
+}) => {
   const mountRef = useRef(null);
-  let sphereGroup; // Group for Bloch sphere + vector
-  let targetRotation = { x: 0, y: 0, z: 0 }; // Store the target rotation values
-  let arrowHelper = null; // Declare globally
+  let sphereGroup;
+  let arrowHelper = null;
+  let targetRotation = { x: 0, y: 0, z: 0 }; // Rotation tracker
 
   useEffect(() => {
     console.log("✅ Current Applied Gates:", appliedGates);
     console.log("✅ Current Bloch Vector:", blochVector);
-    console.log("✅ Current Sphere Rotation: ", targetRotation);
 
-    // Scene setup
+    // ✅ Scene setup
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
-      100, // Field of view (FOV) - controls height
-      window.innerWidth / window.innerHeight, // Aspect ratio - controls width
-      0.1, // Near clipping plane
-      1000 // Far clipping plane
+      100,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000
     );
     const renderer = new THREE.WebGLRenderer({ alpha: true });
 
@@ -29,18 +35,17 @@ const BlochSphere = ({ appliedGates, blochVector, vectorStates, isGateApplied, s
     renderer.setClearColor(0x000000, 0);
     mountRef.current.appendChild(renderer.domElement);
 
-    // ✅ Create a group for the Bloch sphere & vector
+    // ✅ Create Bloch sphere & vector group
     sphereGroup = new THREE.Group();
     scene.add(sphereGroup);
 
-    // ✅ Create the Bloch sphere inside the group
     const geometry = new THREE.SphereGeometry(6.5, 15, 15);
     const material = new THREE.MeshBasicMaterial({
       color: 0x505050,
       wireframe: true,
     });
     const sphere = new THREE.Mesh(geometry, material);
-    sphereGroup.add(sphere); // Add sphere to the group
+    sphereGroup.add(sphere);
 
     // ✅ Shortened Axes
     const axesHelper = new THREE.AxesHelper(6.8);
@@ -49,6 +54,7 @@ const BlochSphere = ({ appliedGates, blochVector, vectorStates, isGateApplied, s
     // ✅ Add Axis Labels (Single function call!)
     addAxisLabels(scene); // 🎯 Modularized!
 
+    // ✅ Function to update the vector (For initial placement & undo)
     const updateVector = () => {
       console.log("---->> non-animation update called <<----- ", blochVector);
       if (blochVector) {
@@ -66,13 +72,15 @@ const BlochSphere = ({ appliedGates, blochVector, vectorStates, isGateApplied, s
       }
     };
 
-    const updateAnimateVector = () => {
-      console.log("---->> animation update called <<----- ", blochVector);
-      if (blochVector) {
+    // ✅ Function to animate gate transformations
+    const animateGateTransformation = (gate) => {
+      console.log("🟠 Animating Gate Transformation!");
+      // see what previous existing vector was and just add that
+      if (prevBlochVector) {
         const direction = new THREE.Vector3(
-          blochVector.y,
-          blochVector.z,
-          blochVector.x
+          prevBlochVector.y,
+          prevBlochVector.z,
+          prevBlochVector.x
         ).normalize();
         const origin = new THREE.Vector3(0, 0, 0);
         const length = 6;
@@ -81,23 +89,58 @@ const BlochSphere = ({ appliedGates, blochVector, vectorStates, isGateApplied, s
         arrowHelper = new THREE.ArrowHelper(direction, origin, length, color);
         sphereGroup.add(arrowHelper);
       }
-    };
 
-    // ✅ Function to animate gate transformations (will add animation later)
-    const animateGateTransformation = () => {
-      console.log("🟠 Animating Gate Transformation!");
-      updateAnimateVector(); // For now, we just call updateVector. (We will add animation later!)
-      // ✅ Delay setting `isGateApplied = false` to prevent immediate re-render
-      setTimeout(() => {
-        console.log("🟢 Resetting isGateApplied after animation...");
-        setIsGateApplied(false);
-      }, 300); // Adjust delay as needed
+      // Determine target rotation (180° rotation per gate)
+      switch (gate) {
+        case "X":
+          targetRotation.z += Math.PI; // Rotate around X-axis
+          break;
+        case "Y":
+          targetRotation.x += Math.PI; // Rotate around Y-axis
+          break;
+        case "Z":
+          targetRotation.y += Math.PI; // Rotate around Z-axis
+          break;
+        default:
+          console.log("⚠️ No rotation needed for this gate.");
+          return;
+      }
+
+      let animationFrame;
+      const animate = () => {
+        // Smooth interpolation using lerp
+        const lerpFactor = 0.005; // Adjust for smoother/faster rotation
+
+        sphereGroup.rotation.x +=
+          (targetRotation.x - sphereGroup.rotation.x) * lerpFactor;
+        sphereGroup.rotation.y +=
+          (targetRotation.y - sphereGroup.rotation.y) * lerpFactor;
+        sphereGroup.rotation.z +=
+          (targetRotation.z - sphereGroup.rotation.z) * lerpFactor;
+
+        renderer.render(scene, camera);
+
+        // Continue animation until close enough
+        if (
+          Math.abs(sphereGroup.rotation.x - targetRotation.x) > 0.01 ||
+          Math.abs(sphereGroup.rotation.y - targetRotation.y) > 0.01 ||
+          Math.abs(sphereGroup.rotation.z - targetRotation.z) > 0.01
+        ) {
+          animationFrame = requestAnimationFrame(animate);
+        } else {
+          cancelAnimationFrame(animationFrame);
+          console.log("✅ Animation Complete");
+          setIsGateApplied(false); // Reset gate applied state
+        }
+      };
+
+      animate();
     };
 
     // ✅ UseEffect Logic
-    if (isGateApplied) {
+    if (isGateApplied && appliedGates.length > 0) {
       console.log("anime called? isGateApplied: ", isGateApplied);
-      animateGateTransformation(); // ✅ Animate only when a gate is applied
+      animateGateTransformation(appliedGates[appliedGates.length - 1]); // ✅ Animate last applied gate
     } else {
       if (blochVector) {
         console.log("non animate called? isGateApplied: ", isGateApplied);
@@ -108,13 +151,11 @@ const BlochSphere = ({ appliedGates, blochVector, vectorStates, isGateApplied, s
     // Add OrbitControls
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
-
     // Camera position
     camera.position.z = 3;
     camera.position.set(6, 6, 6);
     camera.lookAt(0, 0, 0);
 
-    // Animation loop (we will handle rotation smoothly later)
     const animate = () => {
       requestAnimationFrame(animate);
       renderer.render(scene, camera);
@@ -122,13 +163,11 @@ const BlochSphere = ({ appliedGates, blochVector, vectorStates, isGateApplied, s
 
     animate();
 
-    // Cleanup on component unmount
     return () => {
       mountRef.current.removeChild(renderer.domElement);
     };
-  }, [appliedGates, blochVector, vectorStates, isGateApplied]); // Now updates whenever `blochVector` changes
+  }, [appliedGates, blochVector, vectorStates, isGateApplied]);
 
   return <div ref={mountRef} />;
 };
-
 export default BlochSphere;
