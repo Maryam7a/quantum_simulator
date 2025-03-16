@@ -10,16 +10,10 @@ const GatesGrid = ({
   appliedGates, // ✅ Fixed Issue 2
   onMeasure,
 }) => {
-  const gateNames = ["X", "Y", "Z", "Undo", "I", "M"];
+  const gateNames = ["X", "Y", "Z", "H", "I", "M"];
 
   const handleGateClick = (gate) => {
     if (buttonsDisabled) return; // Prevent clicking if gates are disabled
-
-    if (gate === "Undo") {
-      console.log("🟡 Undo button clicked!");
-      onUndo(); // Call the undo function from App.js
-      return;
-    }
 
     if (gate === "M") {
       console.log("🔬 Measurement Gate clicked!");

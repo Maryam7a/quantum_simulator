@@ -29,7 +29,7 @@ export const convertInputToVector = (a, b, c, d) => {
 
   return { x, y, z };
 };
-
+const roundTo3DP = (num) => Math.round(num * 1000) / 1000;
 /**
  * Apply a quantum gate transformation to a Bloch sphere vector
  * @param {Object} vector - The current vector (x, y, z)
@@ -42,15 +42,23 @@ export const applyGateToVector = (vector, gate) => {
   switch (gate) {
     case "X":
       // Applying the X-gate transformation: (x, y, z) -> (x, -y, -z)
-      return { x: x, y: -y, z: -z };
+      return { x: roundTo3DP(-x), y: roundTo3DP(y), z: roundTo3DP(-z) };
 
     case "Y":
       // Applying the Y-gate transformation: (x, y, z) -> (-x, y, -z)
-      return { x: -x, y: y, z: -z };
+      return { x: roundTo3DP(-x), y: roundTo3DP(y), z: roundTo3DP(-z) };
 
     case "Z":
       // Applying the Z-gate transformation: (x, y, z) -> (-x, -y, z)
-      return { x: -x, y: -y, z: z };
+      return { x: roundTo3DP(-x), y: roundTo3DP(-y), z: roundTo3DP(z) };
+    // is most likely wrong
+    case "H": // 🟢 Hadamard Gate Transformation
+      const sqrt2 = Math.sqrt(2);
+      return {
+        x: roundTo3DP((x + z) / sqrt2),
+        y: roundTo3DP(y),
+        z: roundTo3DP((z - x) / sqrt2),
+      };
 
     default:
       console.warn("⚠️ Unknown gate, returning unchanged vector");

@@ -1,10 +1,20 @@
 import * as math from "mathjs";
 
+const roundMatrix = (matrix) =>
+  matrix.map((value) =>
+    math.complex(
+      Math.round(value.re * 1000) / 1000,
+      Math.round(value.im * 1000) / 1000
+    )
+  );
+
 export const createInitialQuantumState = (a, b, c, d) => {
-  return math.matrix([
-    [math.complex(a, b)], // Represents the first amplitude (c1)
-    [math.complex(c, d)], // Represents the second amplitude (c2)
-  ]);
+  return roundMatrix(
+    math.matrix([
+      [math.complex(a, b)], // Represents the first amplitude (c1)
+      [math.complex(c, d)], // Represents the second amplitude (c2)
+    ])
+  );
 };
 
 // Pauli X Gate (NOT Gate)
@@ -13,7 +23,7 @@ export const pauliX = (state) => {
     [0, 1],
     [1, 0],
   ]);
-  return math.multiply(xGate, state);
+  return roundMatrix(math.multiply(xGate, state));
 };
 
 // Pauli Y Gate
@@ -22,7 +32,7 @@ export const pauliY = (state) => {
     [0, math.complex(0, -1)],
     [math.complex(0, 1), 0],
   ]);
-  return math.multiply(yGate, state);
+  return roundMatrix(math.multiply(yGate, state));
 };
 
 // Pauli Z Gate (Phase Flip)
@@ -31,9 +41,9 @@ export const pauliZ = (state) => {
     [1, 0],
     [0, -1],
   ]);
-  return math.multiply(zGate, state);
+  return roundMatrix(math.multiply(zGate, state));
 };
-
+// this h seems correct based on quantum matrix updates
 // Hadamard Gate (Superposition)
 export const hadamard = (state) => {
   const hGate = math.multiply(
@@ -43,7 +53,7 @@ export const hadamard = (state) => {
       [1, -1],
     ])
   );
-  return math.multiply(hGate, state);
+  return roundMatrix(math.multiply(hGate, state));
 };
 
 // S Gate (π/2 Phase Shift)
@@ -52,7 +62,7 @@ export const sGate = (state) => {
     [1, 0],
     [0, math.complex(0, 1)],
   ]);
-  return math.multiply(sMatrix, state);
+  return roundMatrix(math.multiply(sMatrix, state));
 };
 
 // T Gate (π/4 Phase Shift)
@@ -61,7 +71,7 @@ export const tGate = (state) => {
     [1, 0],
     [0, math.exp(math.complex(0, Math.PI / 4))],
   ]);
-  return math.multiply(tMatrix, state);
+  return roundMatrix(math.multiply(tMatrix, state));
 };
 
 // Identity Gate (Does nothing)

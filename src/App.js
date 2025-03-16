@@ -198,6 +198,7 @@ function App() {
         <CircuitLine
           appliedGates={appliedGates}
           matrixStates={matrixStates}
+          onUndo={handleUndo}
           c1={c1}
           c2={c2}
           handleInputChange={handleInputChange}

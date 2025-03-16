@@ -101,6 +101,11 @@ const BlochSphere = ({
         case "Z":
           targetRotation.y += Math.PI; // Rotate around Z-axis
           break;
+        // is most likely wrong
+        case "H":
+          targetRotation.y += Math.PI / 2; // 90° around Y-axis
+          targetRotation.z += Math.PI / 2; // 90° around Z-axis
+          break;
         default:
           console.log("⚠️ No rotation needed for this gate.");
           return;
