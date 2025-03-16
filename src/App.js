@@ -18,6 +18,7 @@ function App() {
   const [matrixStates, setMatrixStates] = useState([]); // Store transformed matrices
   const [blochVector, setBlochVector] = useState(null);
   const [vectorStates, setVectorStates] = useState([]); // Store transformed vectors
+  const [isGateApplied, setIsGateApplied] = useState(false); // Track gate applications
   const [probabilityData, setProbabilityData] = useState({ P0: 0, P1: 0 });
 
   // Handle input changes
@@ -58,7 +59,6 @@ function App() {
     // Disable further gate applications
     setButtonsDisabled(true);
   };
-
 
   const handleShotsChange = (e) => {
     setShots(e.target.value);
@@ -137,6 +137,10 @@ function App() {
 
       return [...prevVectors, newVector]; // Store the updated vector
     });
+
+    // ✅ Mark that a gate was applied (Triggers animation)
+    console.log("🔵 Gate Applied. Triggering Animation.");
+    setIsGateApplied(true);
   };
 
   const handleUndo = () => {
@@ -177,6 +181,8 @@ function App() {
     console.log("  - Applied Gates:", appliedGates);
     console.log("  - Matrix States:", matrixStates);
     console.log("  - Bloch Sphere Vectors:", vectorStates);
+    // ✅ Reset `isGateApplied` so undo doesn't animate
+    setIsGateApplied(false);
   };
 
   return (
@@ -218,6 +224,8 @@ function App() {
               appliedGates={appliedGates}
               blochVector={vectorStates[vectorStates.length - 1]}
               vectorStates={vectorStates}
+              isGateApplied={isGateApplied}
+              setIsGateApplied={setIsGateApplied}
             />
           </div>
 

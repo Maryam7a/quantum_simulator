@@ -78,13 +78,13 @@ const BlochSphere = ({
       // Determine target rotation (180° rotation per gate)
       switch (gate) {
         case "X":
-          targetRotation.z += Math.PI; // Rotate around X-axis
+          targetRotation.x += Math.PI; // Rotate around X-axis
           break;
         case "Y":
-          targetRotation.x += Math.PI; // Rotate around Y-axis
+          targetRotation.y += Math.PI; // Rotate around Y-axis
           break;
         case "Z":
-          targetRotation.y += Math.PI; // Rotate around Z-axis
+          targetRotation.z += Math.PI; // Rotate around Z-axis
           break;
         default:
           console.log("⚠️ No rotation needed for this gate.");
@@ -94,7 +94,7 @@ const BlochSphere = ({
       let animationFrame;
       const animate = () => {
         // Smooth interpolation using lerp
-        const lerpFactor = 0.005; // Adjust for smoother/faster rotation
+        const lerpFactor = 0.1; // Adjust for smoother/faster rotation
 
         sphereGroup.rotation.x +=
           (targetRotation.x - sphereGroup.rotation.x) * lerpFactor;
