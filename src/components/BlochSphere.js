@@ -163,9 +163,38 @@ const BlochSphere = ({
 
     animate();
 
+    // return () => {
+    //   mountRef.current.removeChild(renderer.domElement);
+    // };
     return () => {
-      mountRef.current.removeChild(renderer.domElement);
+      console.log("🧹 Cleaning up WebGL context...");
+
+      // ✅ Remove the renderer from the DOM
+      if (mountRef.current && renderer.domElement) {
+        mountRef.current.removeChild(renderer.domElement);
+      }
+
+      // ✅ Properly dispose of the WebGL renderer and free GPU memory
+      renderer.dispose();
+
+      // ✅ Remove all objects from the scene to avoid memory leaks
+      scene.traverse((object) => {
+        if (object.geometry) object.geometry.dispose();
+        if (object.material) {
+          if (Array.isArray(object.material)) {
+            object.material.forEach((material) => material.dispose());
+          } else {
+            object.material.dispose();
+          }
+        }
+      });
+
+      // ✅ Empty the scene
+      scene.clear();
+
+      console.log("🧹 Cleanup completed!");
     };
+
   }, [appliedGates, blochVector, vectorStates, isGateApplied]);
 
   return <div ref={mountRef} />;
