@@ -5,7 +5,7 @@ import BlochSphere from "./components/BlochSphere";
 import { createInitialQuantumState, measureQuantumState } from "./utils/quantumGates"; // Import function to generate state
 import GatesGrid from "./components/GatesGrid";
 import CircuitLine from "./components/CircuitLine"; // Import the separate circuit line component
-import { applyGateToVector, convertInputToVector } from "./utils/convertInputToVector";
+import { convertInputToVector } from "./utils/convertInputToVector";
 import nustLogo from "./images/Nust-logo.jpg"; // ✅ Correct import
 
 function App() {
@@ -124,15 +124,21 @@ function App() {
         console.warn("⚠️ No initial vector found. Skipping transformation.");
         return prevVectors; // If no vector exists, do nothing
       }
+      // extract the abcd values from new matrix and send that to convertInpuTtoVector // that will return the new vector
+      console.log(
+        "+++++++++++🔵+++++++ heree -- Updated Quantum Matrix received in App.js:",
+        newMatrix
+      );
+      // Extracting real and imaginary parts from newMatrix
+      const a = newMatrix.get([0, 0]).re; // Real part of first complex number
+      const b = newMatrix.get([0, 0]).im; // Imaginary part of first complex number
+      const c = newMatrix.get([1, 0]).re; // Real part of second complex number
+      const d = newMatrix.get([1, 0]).im; // Imaginary part of second complex number
 
-      // Prevent the first gate from applying transformation twice
-      // if (appliedGates.length === 1) {
-      //   console.log("⚠️ First gate detected, skipping extra transformation.");
-      //   return prevVectors;
-      // }
-
-      const lastVector = prevVectors[prevVectors.length - 1]; // Get last known vector
-      const newVector = applyGateToVector(lastVector, gate); // Apply gate transformation
+      console.log("Extracted values:");
+      console.log("a:", a, "b:", b);
+      console.log("c:", c, "d:", d);
+      const newVector = convertInputToVector(a, b, c, d);
       console.log("✅ New Vector after gate:", newVector);
 
       return [...prevVectors, newVector]; // Store the updated vector

@@ -114,7 +114,7 @@ const BlochSphere = ({
       let animationFrame;
       const animate = () => {
         // Smooth interpolation using lerp
-        const lerpFactor = 0.01; // Adjust for smoother/faster rotation
+        const lerpFactor = 0.008; // Adjust for smoother/faster rotation
 
         sphereGroup.rotation.x +=
           (targetRotation.x - sphereGroup.rotation.x) * lerpFactor;

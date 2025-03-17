@@ -1,4 +1,3 @@
-import * as math from "mathjs";
 /**
  * Converts user input (C₀ and C₁ complex numbers) into a Bloch sphere vector.
  * @param {number} a - Real part of C₀
@@ -30,38 +29,3 @@ export const convertInputToVector = (a, b, c, d) => {
   return { x, y, z };
 };
 const roundTo3DP = (num) => Math.round(num * 1000) / 1000;
-/**
- * Apply a quantum gate transformation to a Bloch sphere vector
- * @param {Object} vector - The current vector (x, y, z)
- * @param {string} gate - The gate being applied ("X", "Y", "Z")
- * @returns {Object} - The new transformed vector
- */
-export const applyGateToVector = (vector, gate) => {
-  let { x, y, z } = vector; // Extract the current vector components
-
-  switch (gate) {
-    case "X":
-      // Applying the X-gate transformation: (x, y, z) -> (x, -y, -z)
-      return { x: roundTo3DP(-x), y: roundTo3DP(y), z: roundTo3DP(-z) };
-
-    case "Y":
-      // Applying the Y-gate transformation: (x, y, z) -> (-x, y, -z)
-      return { x: roundTo3DP(-x), y: roundTo3DP(y), z: roundTo3DP(-z) };
-
-    case "Z":
-      // Applying the Z-gate transformation: (x, y, z) -> (-x, -y, z)
-      return { x: roundTo3DP(-x), y: roundTo3DP(-y), z: roundTo3DP(z) };
-    // is most likely wrong
-    case "H": // 🟢 Hadamard Gate Transformation
-      const sqrt2 = Math.sqrt(2);
-      return {
-        x: roundTo3DP((x + z) / sqrt2),
-        y: roundTo3DP(y),
-        z: roundTo3DP((z - x) / sqrt2),
-      };
-
-    default:
-      console.warn("⚠️ Unknown gate, returning unchanged vector");
-      return vector;
-  }
-};
