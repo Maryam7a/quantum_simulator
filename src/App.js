@@ -2,23 +2,23 @@ import React, { useState } from "react";
 import BarChartComponent from "./components/BarChartComponent";
 import "./App.css";
 import BlochSphere from "./components/BlochSphere";
-import { createInitialQuantumState, measureQuantumState } from "./utils/quantumGates"; // Import function to generate state
+import { createInitialQuantumState, measureQuantumState } from "./utils/quantumGates";
 import GatesGrid from "./components/GatesGrid";
-import CircuitLine from "./components/CircuitLine"; // Import the separate circuit line component
+import CircuitLine from "./components/CircuitLine";
 import { convertInputToVector } from "./utils/convertInputToVector";
-import nustLogo from "./images/Nust-logo.jpg"; // ✅ Correct import
+import nustLogo from "./images/Nust-logo.jpg";
 
 function App() {
   const [c1, setC1] = useState({ a: "", b: "" });
   const [c2, setC2] = useState({ c: "", d: "" });
   const [shots, setShots] = useState("");
   const [buttonsDisabled, setButtonsDisabled] = useState(true);
-  const [initialQuantumState, setInitialQuantumState] = useState(null); // Stores validated state
-  const [appliedGates, setAppliedGates] = useState([]); // Store applied gates
-  const [matrixStates, setMatrixStates] = useState([]); // Store transformed matrices
-  const [blochVector, setBlochVector] = useState(null);
-  const [vectorStates, setVectorStates] = useState([]); // Store transformed vectors
-  const [isGateApplied, setIsGateApplied] = useState(false); // Track gate applications
+  const [initialQuantumState, setInitialQuantumState] = useState(null);
+  const [appliedGates, setAppliedGates] = useState([]);
+  const [matrixStates, setMatrixStates] = useState([]);
+  // Always an array so we never run into .length on null
+  const [vectorStates, setVectorStates] = useState([]);
+  const [isGateApplied, setIsGateApplied] = useState(false);
   const [probabilityData, setProbabilityData] = useState({ P0: 0, P1: 0 });
 
   // Handle input changes
@@ -36,27 +36,19 @@ function App() {
       console.error("❌ No quantum state to measure.");
       return;
     }
-
-    // Get the last quantum state
     const latestState = matrixStates[matrixStates.length - 1];
-
-    // Perform measurement
     const { measuredState, probabilities } = measureQuantumState(latestState);
 
     console.log("🎯 Measurement Result:", measuredState);
     console.log("📊 Updating Probability Graph:", probabilities);
-
-    // Update the probability graph
     setProbabilityData(probabilities);
 
-    // Update the Bloch Sphere vector
-    setVectorStates([
+    // Update Bloch vector based on measurement outcome
+    const measuredVector =
       measuredState === "|0⟩"
-        ? { x: 0, y: 0, z: 1 } // Collapse to +Z axis
-        : { x: 0, y: 0, z: -1 }, // Collapse to -Z axis
-    ]);
-
-    // Disable further gate applications
+        ? { x: 0, y: 0, z: 1 }
+        : { x: 0, y: 0, z: -1 };
+    setVectorStates([...vectorStates, measuredVector]);
     setButtonsDisabled(true);
   };
 
@@ -78,35 +70,28 @@ function App() {
 
     const tolerance = 0.01;
     if (Math.abs(sum - 1.0) <= tolerance) {
-      setButtonsDisabled(false); // Enable gates
+      setButtonsDisabled(false);
       console.log("✅ Input is valid. Gates enabled. Sum:", sum);
-
-      // Compute Bloch Sphere Vector
       const initialVector = convertInputToVector(a, b, c, d);
       console.log("🔵 Initial Vector for Bloch Sphere:", initialVector);
-      setVectorStates([initialVector]); // Store as first vector state
+      setVectorStates([initialVector]);
 
-      // Store the initial quantum state
       const initialState = createInitialQuantumState(a, b, c, d);
       console.log("Initial Quantum State:", initialState);
       setInitialQuantumState(initialState);
-      setMatrixStates([initialState]); // Store as first matrix state
+      setMatrixStates([initialState]);
     } else {
-      setButtonsDisabled(true); // Disable gates
+      setButtonsDisabled(true);
       console.log("❌ Invalid input. Gates disabled. Sum:", sum);
-      setBlochVector(null); // Remove the vector if input is invalid
-      setVectorStates(null);
+      // Keep vectorStates as an array to avoid errors
+      setVectorStates([]);
     }
   };
 
-  // **🟢 Step 2: Receive transformed matrix from GatesGrid**
+  // Update matrix and vector state when a gate is applied
   const handleMatrixUpdate = (newMatrix, gate) => {
-    console.log(
-      "🔵 heree -- Updated Quantum Matrix received in App.js:",
-      newMatrix
-    );
+    console.log("🔵 Updated Quantum Matrix received in App.js:", newMatrix);
     console.log("🟢 Gate received in App.js:", gate);
-    // Update matrix states list
     setMatrixStates((prevStates) => {
       const updatedStates = [...prevStates, newMatrix];
       console.log("✅ Updated Matrix States List:", updatedStates);
@@ -118,33 +103,21 @@ function App() {
       return updatedGates;
     });
 
-    // Apply gate transformation to the last vector in vectorStates
+    // Update Bloch vector based on the new matrix transformation
     setVectorStates((prevVectors) => {
       if (prevVectors.length === 0) {
         console.warn("⚠️ No initial vector found. Skipping transformation.");
-        return prevVectors; // If no vector exists, do nothing
+        return prevVectors;
       }
-      // extract the abcd values from new matrix and send that to convertInpuTtoVector // that will return the new vector
-      console.log(
-        "+++++++++++🔵+++++++ heree -- Updated Quantum Matrix received in App.js:",
-        newMatrix
-      );
-      // Extracting real and imaginary parts from newMatrix
-      const a = newMatrix.get([0, 0]).re; // Real part of first complex number
-      const b = newMatrix.get([0, 0]).im; // Imaginary part of first complex number
-      const c = newMatrix.get([1, 0]).re; // Real part of second complex number
-      const d = newMatrix.get([1, 0]).im; // Imaginary part of second complex number
-
-      console.log("Extracted values:");
-      console.log("a:", a, "b:", b);
-      console.log("c:", c, "d:", d);
+      const a = newMatrix.get([0, 0]).re;
+      const b = newMatrix.get([0, 0]).im;
+      const c = newMatrix.get([1, 0]).re;
+      const d = newMatrix.get([1, 0]).im;
+      console.log("Extracted values: a:", a, "b:", b, "c:", c, "d:", d);
       const newVector = convertInputToVector(a, b, c, d);
       console.log("✅ New Vector after gate:", newVector);
-
-      return [...prevVectors, newVector]; // Store the updated vector
+      return [...prevVectors, newVector];
     });
-
-    // ✅ Mark that a gate was applied (Triggers animation)
     console.log("🔵 Gate Applied. Triggering Animation.");
     setIsGateApplied(true);
   };
@@ -154,17 +127,12 @@ function App() {
       console.warn("⚠️ No gate to undo.");
       return;
     }
-
     console.log("🔄 Undoing last gate:", appliedGates[appliedGates.length - 1]);
-
-    // Remove last applied gate
     setAppliedGates((prevGates) => {
       const updatedGates = prevGates.slice(0, -1);
       console.log("✅ Updated Applied Gates List:", updatedGates);
       return updatedGates;
     });
-
-    // Remove last matrix state
     setMatrixStates((prevMatrices) => {
       if (prevMatrices.length > 1) {
         const updatedMatrices = prevMatrices.slice(0, -1);
@@ -173,8 +141,6 @@ function App() {
       }
       return prevMatrices;
     });
-
-    // Remove last vector state (for Bloch sphere)
     setVectorStates((prevVectors) => {
       if (prevVectors.length > 1) {
         const updatedVectors = prevVectors.slice(0, -1);
@@ -187,7 +153,6 @@ function App() {
     console.log("  - Applied Gates:", appliedGates);
     console.log("  - Matrix States:", matrixStates);
     console.log("  - Bloch Sphere Vectors:", vectorStates);
-    // ✅ Reset `isGateApplied` so undo doesn't animate
     setIsGateApplied(false);
   };
 
@@ -198,9 +163,6 @@ function App() {
         <h1 className="project-title">Quantum Circuit Simulator</h1>
       </div>
       <div className="content-container">
-        {/* <div
-          className="App-logo">
-        </div> */}
         <CircuitLine
           appliedGates={appliedGates}
           matrixStates={matrixStates}
@@ -210,10 +172,7 @@ function App() {
           handleInputChange={handleInputChange}
           handleValidateInput={handleValidateInput}
         />
-
-        {/* Bottom Section: Gates, Bloch Sphere & Probability Graph */}
         <div className="bottom-section">
-          {/* Gates Grid (Left) */}
           <div className="gates-grid-container">
             <GatesGrid
               buttonsDisabled={buttonsDisabled}
@@ -221,11 +180,9 @@ function App() {
               onMatrixUpdate={handleMatrixUpdate}
               onUndo={handleUndo}
               appliedGates={appliedGates}
-              onMeasure={handleMeasurement} // ✅ Added measurement function!
+              onMeasure={handleMeasurement}
             />
           </div>
-
-          {/* Bloch Sphere (Center) */}
           <div className="bloch-container">
             <BlochSphere
               appliedGates={appliedGates}
@@ -236,8 +193,6 @@ function App() {
               setIsGateApplied={setIsGateApplied}
             />
           </div>
-
-          {/* Probability Graph (Right) */}
           <div className="bar-chart-container">
             <BarChartComponent
               title="Probability Distribution"

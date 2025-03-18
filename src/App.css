@@ -1,201 +1,263 @@
-.App {
-  text-align: center;
+/* Reset & Global Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+:root {
+  --primary-bg: #1e1e2f;       /* Dark background */
+  --secondary-bg: #28293d;     /* Panel background */
+  --accent-color: #f2a365;      /* Accent color for borders and buttons */
+  --valid-color: #4caf50;       /* Green for valid inputs */
+  --invalid-color: #f44336;     /* Red for invalid inputs */
+  --text-color: #ffffff;        /* White text */
+  --subtext-color: #d3d3d3;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+body {
+  font-family: 'Roboto', sans-serif;
+  background: var(--primary-bg);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
 }
 
-.header {
-  display: flex;
-  align-items: center;
-  /* Ensures they align in one row */
-  justify-content: flex-start;
-  /* Keeps them at the left */
-  width: 100%;
-  height: 10%;
-  /* Keep this for spacing */
-  /* padding: 10px 20px; */
-}
-
-.nust-logo {
-  height: 50%;
-  /* width: auto; */
-  /* Maintain aspect ratio */
-  margin-right: 2%;
-  /* Space between logo and title */
-}
-
-.project-title {
-  font-size: 22px;
-  /* Slightly smaller */
-  font-weight: medium;
-  color: white;
-}
-
+/* App Container */
 .app-container {
-  font-family: Arial, sans-serif;
-  color: white;
-  background-color: rgb(1, 9, 46);
+  display: flex;
+  flex-direction: column;
   height: 100vh;
   padding: 20px;
 }
 
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  background: var(--secondary-bg);
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.nust-logo {
+  height: 50px;
+  width: auto;
+  margin-right: 15px;
+}
+
+.project-title {
+  font-size: 1.5rem;
+  color: var(--accent-color);
+}
+
+/* Content Container */
+.content-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Input Container for X, Y, Z etc */
+.inputs-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.inputs-container label {
+  font-size: 0.9rem;
+  margin-right: 5px;
+}
+
+.inputs-container input {
+  width: 80px;
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid var(--secondary-bg);
+  background: var(--primary-bg);
+  color: var(--text-color);
+  text-align: center;
+}
+
+/* Input Validation Styles */
+input.valid {
+  border: 2px solid var(--valid-color);
+}
+
+input.invalid {
+  border: 2px solid var(--invalid-color);
+}
+
+/* Circuit Line Container */
+.circuit-line-container {
+  margin-bottom: 20px;
+}
+
+/* Bottom Section Layout */
+.bottom-section {
+  display: flex;
+  flex: 1;
+  gap: 20px;
+}
+
+/* Responsive adjustment */
+@media (max-width: 768px) {
+  .bottom-section {
+    flex-direction: column;
+  }
+}
+
+/* Gates Grid Container */
+.gates-grid-container {
+  flex: 1;
+  background: var(--secondary-bg);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Bloch Sphere Container */
+.bloch-container {
+  flex: 1;
+  background: var(--secondary-bg);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Bar Chart Container */
+.bar-chart-container {
+  flex: 1;
+  background: var(--secondary-bg);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Matrix/Table Styles for Quantum State Display */
+.matrix-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+}
+
+.matrix-table th,
+.matrix-table td {
+  border: 1px solid var(--accent-color);
+  padding: 8px;
+  text-align: center;
+}
+
+.matrix-table th {
+  background: var(--secondary-bg);
+  font-weight: bold;
+}
+
+.matrix-table tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Quantum Matrix Container */
+.quantum-matrix-container {
+  width: 100%;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--accent-color);
+  border-radius: 8px;
+  margin: 10px 0;
+}
+
+/* Tabs (if used) */
 .tabs {
   display: flex;
   gap: 10px;
+  margin-bottom: 10px;
 }
 
 .tab {
   padding: 10px 20px;
+  background: var(--secondary-bg);
   border: none;
-  border-radius: 5px;
-  background-color: #333;
-  color: white;
+  border-radius: 8px;
+  color: var(--text-color);
   cursor: pointer;
+  transition: background 0.3s ease;
 }
 
 .tab.active {
-  background-color: #555;
-  color: #ffffff;
+  background: var(--accent-color);
 }
 
 .tab.disabled {
-  background-color: #222;
-  color: #666;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
-.tab-content {
-  margin-top: 20px;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-.content-container {
-  display: flex;
-  flex-direction: column;
-  /* justify-content: space-between; */
-  /* Space between sections */
-  /* align-items: stretch; */
-  /* Stretch items to fit */
-  height: calc(100vh - 50px);
-  /* Account for tabs and padding */
-}
-
-.bottom-section {
-  border: 1px solid #f6f6f6c6;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  /* Center-align all items */
-  align-items: flex-start;
-  /* Vertically align to the center */
-  /* Add space between bar charts and Bloch sphere */
-  width: 100%;
-  box-sizing: border-box;
-  height: auto;
-  /* Let height adjust based on content */
-}
-
-.gates-grid-container {
-  /* Takes equal space in row */
-  height: auto;
-  display: flex;
-  flex: 1;
-  justify-content: center;
-    /* Center horizontally */
-  align-items: center;
-    /* Center vertically */
-  border: 1px solid #092bbe;
-    /* Just to visualize it */
-}
-
-.bloch-container-main {
-  border: #092bbe;
-  /* flex: 1.5; */
-  /* Slightly bigger than Gates Grid */
-  /* display: flex; */
-  /* justify-content: center; */
-  /* Center sphere */
-  /* align-items: center; */
-}
-
-.bar-chart-container {
-  border: #092bbe;
-  flex: 2;
-  /* width: 25%; */
-  /* Same size as Gates Grid */
-  display: flex;
-  justify-content: flex-end;
-  /* Align to right */
-  align-items: center;
-}
-
-.circuit-line-container {
-  /* border: 1px solid #0bbe11; */
-  margin-top: 5px;
-  /* Reduce space above Circuit Line */
-}
-
-/* Centering the button container */
+/* Validate Button Container */
 .validate-button-container {
-  /* border: 1px solid #c51ec2; */
-  display: flex;
-  align-items: center;
-}
-
-/* Circular button */
-.validate-button {
-  border: 1px solid #092bbe;
-  width: 20px;
-  height: 20px;
-  background-color: #373030;
-  color: rgb(232, 232, 232);
-  font-size: 1.5rem;
-  font-weight: normal;
-  border-radius: 50%;
-  /* Makes it a perfect circle */
-  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
+  margin: 10px 0;
 }
 
-/* Hover effect */
+/* Circular Validate Button */
+.validate-button {
+  width: 40px;
+  height: 40px;
+  background: var(--accent-color);
+  color: var(--text-color);
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
 .validate-button:hover {
-  background-color: #1245d1;
   transform: scale(1.1);
 }
 
-/* Optional: Add a subtle shadow effect on click */
-.validate-button:active {
-  transform: scale(1.05);
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+/* Form Elements Generic Styles */
+input {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid var(--secondary-bg);
+  background: var(--primary-bg);
+  color: var(--text-color);
+  margin: 5px;
 }
 
-.quantum-matrix-container {
-  /* display: flex; */
-  /* justify-content: center; */
-  /* align-items: center; */
-  width:15%;
-  padding: 10px;
-  /* border: 1px solid rgba(255, 255, 255, 0.2); */
-  /* Example: subtle border */
-  border-radius: 10px;
-  /* Rounded corners */
-  background-color: rgba(255, 255, 255, 0.05);
-  /* Slight background for visibility */
+button {
+  background: var(--accent-color);
+  color: var(--text-color);
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin: 5px;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+/* Responsive Images */
+img {
+  max-width: 100%;
+  height: auto;
 }
