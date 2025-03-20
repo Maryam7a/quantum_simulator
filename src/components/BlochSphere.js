@@ -7,177 +7,164 @@ import "./BlochSphere.css";
 const BlochSphere = ({
   appliedGates,
   blochVector,
-  prevBlochVector,
-  vectorStates,
+  prevBlochVector, // Not used explicitly in this version
   isGateApplied,
   setIsGateApplied,
 }) => {
   const mountRef = useRef(null);
-  const sceneRef = useRef(null);
-  const cameraRef = useRef(null);
-  const rendererRef = useRef(null);
-  const sphereGroupRef = useRef(null);
-  const arrowHelperRef = useRef(null);
-
-  // Initialize Three.js scene only once
-  useEffect(() => {
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(
+  const sceneRef = useRef(new THREE.Scene());
+  const cameraRef = useRef(
+    new THREE.PerspectiveCamera(
       100,
       window.innerWidth / window.innerHeight,
       0.1,
       1000
+    )
+  );
+  const rendererRef = useRef(new THREE.WebGLRenderer({ alpha: true }));
+  const sphereGroupRef = useRef(new THREE.Group());
+  const arrowHelperRef = useRef(null);
+  // Transformation history (only for non-identity gates)
+  const groupHistoryRef = useRef([]);
+  // Track previous appliedGates length to determine new transformation or undo
+  const prevGatesLengthRef = useRef(appliedGates.length);
+  // Track the last gate that caused a transformation (skip if it was "I")
+  const lastAppliedGateRef = useRef(null);
+
+  // INITIALIZATION: Scene, Camera, Renderer, Sphere & Axes (runs only once)
+  useEffect(() => {
+    rendererRef.current.setSize(
+      window.innerWidth * 0.75,
+      window.innerHeight * 0.75
     );
-    const renderer = new THREE.WebGLRenderer({ alpha: true });
-    renderer.setSize(window.innerWidth * 0.75, window.innerHeight * 0.75);
-    renderer.setClearColor(0x000000, 0);
-    mountRef.current.appendChild(renderer.domElement);
+    rendererRef.current.setClearColor(0x000000, 0);
+    if (mountRef.current) {
+      mountRef.current.appendChild(rendererRef.current.domElement);
+    }
+    cameraRef.current.position.set(6, 6, 6);
+    cameraRef.current.lookAt(0, 0, 0);
 
-    // Create a group to hold the sphere and the arrow helper
-    const sphereGroup = new THREE.Group();
-    scene.add(sphereGroup);
-
-    // Create the wireframe sphere
+    // Create Bloch sphere mesh and add it to the sphere group
     const geometry = new THREE.SphereGeometry(6.5, 15, 15);
     const material = new THREE.MeshBasicMaterial({
       color: 0x505050,
       wireframe: true,
     });
     const sphere = new THREE.Mesh(geometry, material);
-    sphereGroup.add(sphere);
+    sphereGroupRef.current.add(sphere);
+    sceneRef.current.add(sphereGroupRef.current);
 
-    // Add axes helper and axis labels
+    // Add Axes Helper and Axis Labels
     const axesHelper = new THREE.AxesHelper(6.8);
-    scene.add(axesHelper);
-    addAxisLabels(scene);
+    sceneRef.current.add(axesHelper);
+    addAxisLabels(sceneRef.current);
 
     // Setup OrbitControls
-    const controls = new OrbitControls(camera, renderer.domElement);
+    const controls = new OrbitControls(
+      cameraRef.current,
+      rendererRef.current.domElement
+    );
     controls.enableDamping = true;
-    camera.position.set(6, 6, 6);
-    camera.lookAt(0, 0, 0);
 
-    // Save references for later updates
-    sceneRef.current = scene;
-    cameraRef.current = camera;
-    rendererRef.current = renderer;
-    sphereGroupRef.current = sphereGroup;
+    // Initialize transformation history with the starting (identity) rotation
+    groupHistoryRef.current = [sphereGroupRef.current.rotation.clone()];
 
     // Start the render loop
     const animate = () => {
       requestAnimationFrame(animate);
-      controls.update();
-      renderer.render(scene, camera);
+      rendererRef.current.render(sceneRef.current, cameraRef.current);
     };
     animate();
-
-    // Cleanup on unmount
-    return () => {
-      if (mountRef.current && renderer.domElement) {
-        mountRef.current.removeChild(renderer.domElement);
-      }
-      renderer.dispose();
-      scene.traverse((object) => {
-        if (object.geometry) object.geometry.dispose();
-        if (object.material) {
-          if (Array.isArray(object.material)) {
-            object.material.forEach((mat) => mat.dispose());
-          } else {
-            object.material.dispose();
-          }
-        }
-      });
-      scene.clear();
-    };
   }, []);
 
-  // Update transformation: animate rotation and update arrow direction
-  useEffect(() => {
-    if (!sphereGroupRef.current) return;
-    const sphereGroup = sphereGroupRef.current;
+  // FUNCTION: Animate a new gate transformation and update the history stack
+  const animateGateTransformation = (gate) => {
+    let rotationAxis = new THREE.Vector3();
+    let remainingAngle = Math.PI; // Default rotation of 180°
+    switch (gate) {
+      case "X":
+        rotationAxis.set(0, 0, 1); // Rotate about Z-axis
+        break;
+      case "Y":
+        rotationAxis.set(1, 0, 0); // Rotate about X-axis
+        break;
+      case "Z":
+        rotationAxis.set(0, -1, 0); // Rotate about Y-axis
+        break;
+      case "H":
+        rotationAxis.set(1, 0, 1).normalize(); // Diagonal rotation (X+Z)
+        break;
+      default:
+        console.log("No rotation defined for gate:", gate);
+        return;
+    }
 
-    // If the arrow helper doesn't exist yet and we have a Bloch vector, create it.
-    if (!arrowHelperRef.current && blochVector) {
+    const animate = () => {
+      const step = 0.01; // Small rotation step for smooth animation
+      sphereGroupRef.current.rotateOnAxis(rotationAxis, step);
+      rendererRef.current.render(sceneRef.current, cameraRef.current);
+      remainingAngle -= step;
+      if (remainingAngle > 0.01) {
+        requestAnimationFrame(animate);
+      } else {
+        // Animation complete—update transformation history with final rotation state
+        setIsGateApplied(false);
+        groupHistoryRef.current.push(sphereGroupRef.current.rotation.clone());
+      }
+    };
+    animate();
+  };
+
+  // EFFECT: Monitor changes to appliedGates and apply new transformation or undo as needed
+  useEffect(() => {
+    const prevLength = prevGatesLengthRef.current;
+    const lastGate = appliedGates[appliedGates.length - 1] || null;
+
+    // If the last applied gate is the identity, update tracking and do nothing further
+    if (lastGate === "I") {
+      prevGatesLengthRef.current = appliedGates.length;
+      lastAppliedGateRef.current = "I";
+    }
+    // New transformation: non-identity gate added and transformation flag is true
+    else if (appliedGates.length > prevLength && isGateApplied) {
+      animateGateTransformation(lastGate);
+      lastAppliedGateRef.current = lastGate;
+      prevGatesLengthRef.current = appliedGates.length;
+    }
+    // Undo: appliedGates length decreased; revert to previous transformation state if the undone gate was non‑identity
+    else if (appliedGates.length < prevLength) {
+      if (lastAppliedGateRef.current !== "I") {
+        if (groupHistoryRef.current.length > 1) {
+          groupHistoryRef.current.pop(); // Remove current state
+          const previousRotation =
+            groupHistoryRef.current[groupHistoryRef.current.length - 1];
+          sphereGroupRef.current.rotation.copy(previousRotation);
+        } else {
+          sphereGroupRef.current.rotation.set(0, 0, 0);
+          groupHistoryRef.current = [sphereGroupRef.current.rotation.clone()];
+        }
+      }
+      // Update tracking with the new last gate (could be "I" or a non‑identity gate)
+      const newLastGate = appliedGates[appliedGates.length - 1] || null;
+      lastAppliedGateRef.current = newLastGate;
+      prevGatesLengthRef.current = appliedGates.length;
+    }
+    // On initial render, if no arrow helper exists, create it from blochVector
+    else if (!arrowHelperRef.current && blochVector) {
       const direction = new THREE.Vector3(
         blochVector.y,
         blochVector.z,
         blochVector.x
       ).normalize();
-      const origin = new THREE.Vector3(0, 0, 0);
-      const length = 6;
-      const color = 0xff0000;
-      const arrowHelper = new THREE.ArrowHelper(direction, origin, length, color);
-      sphereGroup.add(arrowHelper);
-      arrowHelperRef.current = arrowHelper;
+      arrowHelperRef.current = new THREE.ArrowHelper(
+        direction,
+        new THREE.Vector3(0, 0, 0),
+        6,
+        0xff0000
+      );
+      sphereGroupRef.current.add(arrowHelperRef.current);
     }
-
-    // If a transformation is being applied, animate the rotation of the entire group.
-    if (isGateApplied && appliedGates.length > 0) {
-      const gate = appliedGates[appliedGates.length - 1];
-      const targetRotation = { 
-        x: sphereGroup.rotation.x, 
-        y: sphereGroup.rotation.y, 
-        z: sphereGroup.rotation.z 
-      };
-      switch (gate) {
-        case "X":
-          targetRotation.z += Math.PI;
-          break;
-        case "Y":
-          targetRotation.x += Math.PI;
-          break;
-        case "Z":
-          targetRotation.y += Math.PI;
-          break;
-        case "H":
-          targetRotation.y += Math.PI / 2;
-          targetRotation.z += Math.PI / 2;
-          break;
-        default:
-          console.log("No rotation needed for this gate.");
-          break;
-      }
-      let animationFrame;
-      const animateTransformation = () => {
-        const lerpFactor = 0.008;
-        sphereGroup.rotation.x += (targetRotation.x - sphereGroup.rotation.x) * lerpFactor;
-        sphereGroup.rotation.y += (targetRotation.y - sphereGroup.rotation.y) * lerpFactor;
-        sphereGroup.rotation.z += (targetRotation.z - sphereGroup.rotation.z) * lerpFactor;
-        rendererRef.current.render(sceneRef.current, cameraRef.current);
-        if (
-          Math.abs(sphereGroup.rotation.x - targetRotation.x) > 0.01 ||
-          Math.abs(sphereGroup.rotation.y - targetRotation.y) > 0.01 ||
-          Math.abs(sphereGroup.rotation.z - targetRotation.z) > 0.01
-        ) {
-          animationFrame = requestAnimationFrame(animateTransformation);
-        } else {
-          cancelAnimationFrame(animationFrame);
-          console.log("✅ Animation Complete");
-          setIsGateApplied(false);
-          // After the rotation, update the arrow helper's direction (if needed)
-          if (blochVector && arrowHelperRef.current) {
-            const newDir = new THREE.Vector3(
-              blochVector.y,
-              blochVector.z,
-              blochVector.x
-            ).normalize();
-            arrowHelperRef.current.setDirection(newDir);
-          }
-        }
-      };
-      animateTransformation();
-    } else {
-      // If not animating, simply update the arrow helper's direction.
-      if (blochVector && arrowHelperRef.current) {
-        const newDir = new THREE.Vector3(
-          blochVector.y,
-          blochVector.z,
-          blochVector.x
-        ).normalize();
-        arrowHelperRef.current.setDirection(newDir);
-      }
-    }
-  }, [appliedGates, blochVector, isGateApplied]);
+  }, [appliedGates, blochVector, isGateApplied, setIsGateApplied]);
 
   return <div ref={mountRef} />;
 };

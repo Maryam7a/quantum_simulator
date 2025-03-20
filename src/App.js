@@ -97,29 +97,15 @@ function App() {
       console.log("✅ Updated Matrix States List:", updatedStates);
       return updatedStates;
     });
-    setAppliedGates((prevGates) => {
-      const updatedGates = [...prevGates, gate];
-      console.log("✅ Updated Applied Gates List:", updatedGates);
-      return updatedGates;
-    });
+    // Always add the gate to the appliedGates array
+    setAppliedGates((prevGates) => [...prevGates, gate]);
 
-    // Update Bloch vector based on the new matrix transformation
-    setVectorStates((prevVectors) => {
-      if (prevVectors.length === 0) {
-        console.warn("⚠️ No initial vector found. Skipping transformation.");
-        return prevVectors;
-      }
-      const a = newMatrix.get([0, 0]).re;
-      const b = newMatrix.get([0, 0]).im;
-      const c = newMatrix.get([1, 0]).re;
-      const d = newMatrix.get([1, 0]).im;
-      console.log("Extracted values: a:", a, "b:", b, "c:", c, "d:", d);
-      const newVector = convertInputToVector(a, b, c, d);
-      console.log("✅ New Vector after gate:", newVector);
-      return [...prevVectors, newVector];
-    });
-    console.log("🔵 Gate Applied. Triggering Animation.");
-    setIsGateApplied(true);
+    // For non-identity gates, trigger transformation animation
+    if (gate !== "I") {
+      console.log("🔵 Gate Applied. Triggering Animation.");
+      setIsGateApplied(true);
+    }
+    // For identity, no transformation is needed (so buttons remain enabled)
   };
 
   const handleUndo = () => {
@@ -128,24 +114,16 @@ function App() {
       return;
     }
     console.log("🔄 Undoing last gate:", appliedGates[appliedGates.length - 1]);
-    setAppliedGates((prevGates) => {
-      const updatedGates = prevGates.slice(0, -1);
-      console.log("✅ Updated Applied Gates List:", updatedGates);
-      return updatedGates;
-    });
+    setAppliedGates((prevGates) => prevGates.slice(0, -1));
     setMatrixStates((prevMatrices) => {
       if (prevMatrices.length > 1) {
-        const updatedMatrices = prevMatrices.slice(0, -1);
-        console.log("✅ Updated Matrix States List:", updatedMatrices);
-        return updatedMatrices;
+        return prevMatrices.slice(0, -1);
       }
       return prevMatrices;
     });
     setVectorStates((prevVectors) => {
       if (prevVectors.length > 1) {
-        const updatedVectors = prevVectors.slice(0, -1);
-        console.log("✅ Updated Bloch Sphere Vectors:", updatedVectors);
-        return updatedVectors;
+        return prevVectors.slice(0, -1);
       }
       return prevVectors;
     });
@@ -153,7 +131,8 @@ function App() {
     console.log("  - Applied Gates:", appliedGates);
     console.log("  - Matrix States:", matrixStates);
     console.log("  - Bloch Sphere Vectors:", vectorStates);
-    setIsGateApplied(false);
+    // Disable transformation during the undo animation (if any)
+    setIsGateApplied(true);
   };
 
   return (
@@ -175,7 +154,8 @@ function App() {
         <div className="bottom-section">
           <div className="gates-grid-container">
             <GatesGrid
-              buttonsDisabled={buttonsDisabled}
+              // Disable buttons if the input is invalid OR a non-identity transformation is in progress.
+              buttonsDisabled={buttonsDisabled || isGateApplied}
               initialQuantumState={matrixStates[matrixStates.length - 1]}
               onMatrixUpdate={handleMatrixUpdate}
               onUndo={handleUndo}
@@ -188,7 +168,6 @@ function App() {
               appliedGates={appliedGates}
               blochVector={vectorStates[vectorStates.length - 1]}
               prevBlochVector={vectorStates[vectorStates.length - 2]}
-              vectorStates={vectorStates}
               isGateApplied={isGateApplied}
               setIsGateApplied={setIsGateApplied}
             />
