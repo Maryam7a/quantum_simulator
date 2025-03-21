@@ -1,7 +1,7 @@
 .bar-chart-container {
     width: 200px;
     /* Adjusted to reduce overall chart width */
-    padding: 10px;
+    /* padding: 10px; */
 }
 
 .bar-chart-title {
