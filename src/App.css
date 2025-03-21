@@ -107,13 +107,22 @@ input.invalid {
 
 /* Bottom section component sizes */
 .gates-grid-container,
-.bloch-container,
 .bar-chart-container {
   flex: 1;
   min-width: 300px;
   max-width: calc((100% - 40px) / 3); /* Accounts for gaps between components */
   height: 100%; /* Each component fills the available height */
   overflow: auto;
+}
+
+
+/* For Bloch Sphere Container: Make it static */
+.bloch-container {
+  flex: 1;
+  min-width: 300px;
+  max-width: calc((100% - 40px) / 3);
+  height: 100%;
+  overflow: visible; /* Removes scrolling */
 }
 
 /* Responsive adjustment */
