@@ -16,7 +16,6 @@ function App() {
   const [initialQuantumState, setInitialQuantumState] = useState(null);
   const [appliedGates, setAppliedGates] = useState([]);
   const [matrixStates, setMatrixStates] = useState([]);
-  // Always an array so we never run into .length on null
   const [vectorStates, setVectorStates] = useState([]);
   const [isGateApplied, setIsGateApplied] = useState(false);
   const [probabilityData, setProbabilityData] = useState({ P0: 0, P1: 0 });
@@ -83,7 +82,6 @@ function App() {
     } else {
       setButtonsDisabled(true);
       console.log("❌ Invalid input. Gates disabled. Sum:", sum);
-      // Keep vectorStates as an array to avoid errors
       setVectorStates([]);
     }
   };
@@ -97,17 +95,16 @@ function App() {
       console.log("✅ Updated Matrix States List:", updatedStates);
       return updatedStates;
     });
-    // Always add the gate to the appliedGates array
     setAppliedGates((prevGates) => [...prevGates, gate]);
 
-    // For non-identity gates, trigger transformation animation
+    // For non-identity gates, trigger transformation animation.
     if (gate !== "I") {
       console.log("🔵 Gate Applied. Triggering Animation.");
       setIsGateApplied(true);
     }
-    // For identity, no transformation is needed (so buttons remain enabled)
   };
 
+  // Undo handler: after undo, enable gates (set isGateApplied to false)
   const handleUndo = () => {
     if (appliedGates.length === 0) {
       console.warn("⚠️ No gate to undo.");
@@ -131,8 +128,8 @@ function App() {
     console.log("  - Applied Gates:", appliedGates);
     console.log("  - Matrix States:", matrixStates);
     console.log("  - Bloch Sphere Vectors:", vectorStates);
-    // Disable transformation during the undo animation (if any)
-    setIsGateApplied(true);
+    // Enable gates after undo.
+    setIsGateApplied(false);
   };
 
   return (
@@ -154,7 +151,6 @@ function App() {
         <div className="bottom-section">
           <div className="gates-grid-container">
             <GatesGrid
-              // Disable buttons if the input is invalid OR a non-identity transformation is in progress.
               buttonsDisabled={buttonsDisabled || isGateApplied}
               initialQuantumState={matrixStates[matrixStates.length - 1]}
               onMatrixUpdate={handleMatrixUpdate}

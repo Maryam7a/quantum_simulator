@@ -30,8 +30,6 @@ const BlochSphere = ({
   const groupHistoryRef = useRef([]);
   // Track previous appliedGates length.
   const prevGateCountRef = useRef(appliedGates.length);
-  // Track the last non-identity gate for which animation was started.
-  const lastAppliedGateRef = useRef(null);
 
   // INITIALIZATION: Setup scene, camera, renderer, sphere & axes
   useEffect(() => {
@@ -70,7 +68,7 @@ const BlochSphere = ({
 
     // Initialize history with the initial (identity) rotation state.
     groupHistoryRef.current = [sphereGroupRef.current.rotation.clone()];
-    
+
     // Start render loop
     const animate = () => {
       requestAnimationFrame(animate);
@@ -120,37 +118,32 @@ const BlochSphere = ({
 
   // EFFECT: Respond to changes in appliedGates (new transformation or undo)
   useEffect(() => {
-    // Desired history length is (number of applied gates + 1).
     const desiredHistoryLength = appliedGates.length + 1;
     const history = groupHistoryRef.current;
     const currentGateCount = appliedGates.length;
     const lastGate = appliedGates[appliedGates.length - 1] || null;
 
-    // Undo case: if gate count has decreased, pop extra states and restore.
     if (currentGateCount < prevGateCountRef.current) {
+      // Undo: Pop extra states and restore the previous rotation.
       while (history.length > desiredHistoryLength) {
         history.pop();
       }
-      // Restore the group rotation from the latest saved state.
       const previousState = history[history.length - 1];
       sphereGroupRef.current.rotation.copy(previousState);
       sphereGroupRef.current.updateMatrix();
-    }
-    // New transformation: gate count increased.
-    else if (currentGateCount > prevGateCountRef.current) {
+      // Re-enable gates after undo.
+      setIsGateApplied(false);
+    } else if (currentGateCount > prevGateCountRef.current) {
       if (lastGate === "I") {
-        // For identity, simply record the current (unchanged) state.
+        // For identity, record the current state.
         history.push(sphereGroupRef.current.rotation.clone());
       } else if (lastGate) {
-        // For non-identity, if an animation is in progress, start it.
-        if (isGateApplied && lastAppliedGateRef.current !== lastGate) {
-          lastAppliedGateRef.current = lastGate;
-          animateGateTransformation(lastGate);
-        }
+        // For non-identity gates (like H), always trigger the transformation.
+        animateGateTransformation(lastGate);
       }
     }
     prevGateCountRef.current = currentGateCount;
-  }, [appliedGates, isGateApplied, setIsGateApplied]);
+  }, [appliedGates]);
 
   // EFFECT: Create arrow helper if not yet created.
   useEffect(() => {

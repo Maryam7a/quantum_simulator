@@ -1,55 +1,54 @@
-/* Make entire table transparent */
-.ant-table {
-    /* margin-top: 20px; */
-    /* padding-top: 50px; */
-    background: transparent !important;
-}
-
-/* Hide the header (if not needed) */
-.ant-table-thead {
-    display: none !important;
-}
-
-/* Reduce table row height */
-.ant-table-tbody>tr>td {
-    background: transparent !important;
-    border: none !important;
-    color: white !important;
-    padding: 0px !important;
-    font-size: 1.5rem !important;
-    line-height: 1.8 !important;
-    text-align: center !important;
-        /* Center align text */
-        /* display: flex; */
-        justify-content: center;
-        /* Ensures number stays between grey labels */
-        align-items: center;
-        /* Vertically centers text */
-}
-
-/* Reduce spacing inside input fields */
-.ant-input {
-    padding: 0px !important;
-    /* alters the height between the two rows */
-    text-align: center !important;
-}
-
-/* Style matrix brackets */
+/* Container that holds brackets + matrix rows side by side */
 .matrix-wrapper {
-    color: turquoise;
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center horizontally if desired */
+  color: #ffffff;          /* Text color (white) */
+  font-family: "Roboto Mono", monospace; /* A nice monospaced font */
 }
 
+/* Brackets (left and right) stacked top and bottom */
 .matrix-bracket {
-    font-size: 2rem;
-    color: rgb(54, 54, 54);
-    font-weight: lighter;
-    /* position: relative; */
-    /* top: 6px; */
-    /* margin: 1 px; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 2rem;  /* Size of the brackets */
+  color: #888;      /* Bracket color */
+  margin: 0 8px;    /* Horizontal space around brackets */
 }
 
-.matrix-bracket.right {
-    margin-left: 0px;
+/* Spacing for the top/bottom bracket symbols */
+.top-bracket {
+  margin-bottom: 10px;
+}
+.bottom-bracket {
+  margin-top: 10px;
+}
+
+/* Main content that displays the matrix entries */
+.matrix-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 1.2rem;  /* Size of the matrix text */
+  min-width: 120px;   /* Some width to keep it tidy */
+}
+
+/* Each row in the matrix (C0, C1, etc.) */
+.matrix-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 8px 0; /* Space between rows */
+}
+
+/* Label (C0, C1) styling */
+.matrix-label {
+  margin-right: 12px;
+  color: #ccc;
+}
+
+/* Actual numeric values (e.g. 0.707 + 0.000i) */
+.matrix-value {
+  color: #fff;
 }
