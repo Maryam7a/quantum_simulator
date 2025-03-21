@@ -75,7 +75,7 @@ body {
 
 .inputs-container input {
   width: 80px;
-  padding: 5px;
+  /* padding: 5px; */
   border-radius: 4px;
   border: 1px solid var(--secondary-bg);
   background: var(--primary-bg);
@@ -94,7 +94,7 @@ input.invalid {
 
 /* Circuit Line Container */
 .circuit-line-container {
-  margin-bottom: 20px;
+  margin-bottom: 5px;
 }
 
 /* Bottom Section Layout */
@@ -102,6 +102,7 @@ input.invalid {
   display: flex;
   flex: 1;
   gap: 20px;
+  height: 100%;
 }
 
 /* Responsive adjustment */
@@ -127,7 +128,7 @@ input.invalid {
   flex: 1;
   background: var(--secondary-bg);
   border-radius: 8px;
-  padding: 20px;
+  /* padding: 5px; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -168,14 +169,14 @@ input.invalid {
 }
 
 /* Quantum Matrix Container */
-.quantum-matrix-container {
+/* .quantum-matrix-container {
   width: 100%;
-  padding: 15px;
+  padding: 15px; 
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--accent-color);
   border-radius: 8px;
   margin: 10px 0;
-}
+} */
 
 /* Tabs (if used) */
 .tabs {
@@ -204,15 +205,15 @@ input.invalid {
 }
 
 /* Validate Button Container */
-.validate-button-container {
+/* .validate-button-container {
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 10px 0;
-}
+} */
 
 /* Circular Validate Button */
-.validate-button {
+/* .validate-button {
   width: 40px;
   height: 40px;
   background: var(--accent-color);
@@ -225,11 +226,11 @@ input.invalid {
   font-size: 1.5rem;
   cursor: pointer;
   transition: transform 0.3s ease;
-}
+} */
 
-.validate-button:hover {
+/* .validate-button:hover {
   transform: scale(1.1);
-}
+} */
 
 /* Form Elements Generic Styles */
 input {

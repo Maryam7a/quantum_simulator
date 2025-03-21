@@ -12,7 +12,6 @@ const CircuitLine = ({ appliedGates, matrixStates, onUndo, c1, c2, handleInputCh
         <span className="qubit-label">|q₀⟩</span>
         <QuantumMatrix c1={c1} c2={c2} handleInputChange={handleInputChange} />
 
-        {/* Validate Button Inside CircuitLine */}
         <div className="validate-button-container">
           <button className="validate-button" onClick={handleValidateInput}>
             ✔

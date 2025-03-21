@@ -2,16 +2,17 @@ import React from "react";
 import { Table, Input } from "antd";
 import "./quantummatrix.css";
 
-
 const QuantumMatrix = ({ c1, c2, handleInputChange }) => {
+  // Columns for the input matrix
   const columns = [
     {
       dataIndex: "label",
       render: (text) => (
-        <span style={{ fontWeight: "normal", color: "grey" }}>{text}</span>
+        <span style={{ fontWeight: "bold", color: "grey", marginRight: "6px" }}>
+          {text}
+        </span>
       ),
     },
-
     {
       dataIndex: "real",
       width: "60px",
@@ -21,21 +22,21 @@ const QuantumMatrix = ({ c1, c2, handleInputChange }) => {
           onChange={(e) => handleInputChange(e, record.key, "real")}
           placeholder="0.0"
           style={{
-            width: "50px",
-            background: "transparent", // Make the field transparent
-            border: "none", // Remove border
-            color: "white", // Change text color to white
+            width: "30px",
+            background: "rgba(255,255,255,0.1)",
+            border: "1px solid grey",
+            color: "white",
             textAlign: "center",
-            margin: 0 /* Reduce left & right margin */,
-            padding: 0 /* Reduce input field height */,
+            margin: 0,
+            padding: "4px",
+            borderRadius: "4px",
           }}
         />
       ),
     },
     {
       dataIndex: "plus",
-      render: () => <span style={{ color: "grey", width: "0px" }}>+</span>, // Apply color here
-      // width: 10, // Keep the width small
+      render: () => <span style={{ color: "grey", margin: "0 4px" }}>+</span>,
     },
     {
       dataIndex: "imag",
@@ -46,37 +47,56 @@ const QuantumMatrix = ({ c1, c2, handleInputChange }) => {
           onChange={(e) => handleInputChange(e, record.key, "imag")}
           placeholder="0.0"
           style={{
-            width: "50px",
-            background: "transparent", // Make the field transparent
-            border: "grey", // Remove border
-            color: "white", // Change text color to white
+            width: "30px",
+            background: "rgba(255,255,255,0.1)",
+            border: "1px solid grey",
+            color: "white",
             textAlign: "center",
-            margin: 0, // Remove margin
-            padding: 0, // Remove padding
+            margin: 0,
+            padding: "4px",
+            borderRadius: "4px",
           }}
         />
       ),
     },
     {
       dataIndex: "i",
-      render: () => <span style={{ color: "grey" }}>i</span>, // Apply color here
-      width: 0,
+      render: () => <span style={{ color: "grey", marginLeft: "3px" }}>i</span>,
     },
   ];
 
+  // Two rows: C₀ and C₁
   const data = [
-    { key: "c0", label: "C₀", real: c1.a, imag: c1.b },
-    { key: "c1", label: "C₁", real: c2.c, imag: c2.d },
+    {
+      key: "c0",
+      label: "C₀",
+      real: c1.a,
+      plus: "+",
+      imag: c1.b,
+      i: "i",
+    },
+    {
+      key: "c1",
+      label: "C₁",
+      real: c2.c,
+      plus: "+",
+      imag: c2.d,
+      i: "i",
+    },
   ];
 
   return (
     <div className="matrix-wrapper">
-      {/* Left Bracket */}
+      {/* Left bracket */}
       <div className="matrix-bracket left">
-        ⎡<br />⎣
+        
+        ⎡
+        <br />
+        <br />
+        ⎣
       </div>
 
-      {/* Table Content */}
+      {/* Table for the input fields */}
       <div className="matrix-content">
         <Table
           columns={columns}
@@ -84,17 +104,19 @@ const QuantumMatrix = ({ c1, c2, handleInputChange }) => {
           pagination={false}
           bordered={false}
           size="small"
-          style={{ width: "110px", textAlign: "center" }}
+          style={{ width: "180px", textAlign: "center" }}
         />
       </div>
 
-      {/* Right Bracket */}
+      {/* Right bracket */}
       <div className="matrix-bracket right">
-        ⎤<br />⎦
+        ⎤
+        <br />
+        <br />
+        ⎦
       </div>
     </div>
   );
-
 };
 
 export default QuantumMatrix;

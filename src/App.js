@@ -48,7 +48,8 @@ function App() {
         ? { x: 0, y: 0, z: 1 }
         : { x: 0, y: 0, z: -1 };
     setVectorStates([...vectorStates, measuredVector]);
-    setButtonsDisabled(true);
+
+    // Note: No gate disabling during measurement ("M")
   };
 
   const handleShotsChange = (e) => {

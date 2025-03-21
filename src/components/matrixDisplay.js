@@ -1,30 +1,23 @@
 import React from "react";
 import { Table } from "antd";
-import "./matrixDisplay.css"; // Reuse same styles for consistency
+import "./matrixDisplay.css";
 
 const MatrixDisplay = ({ matrixState }) => {
-  // console.log("🔵 Received Matrix State in MatrixDisplay:", matrixState);
-  // console.log("whyyyyyyy");
-  // console.log("ajeeb, matrixState[0][0].re", matrixState._data[0][0].re);
-  // console.log("ajeeb, matrixState[0][0].im", matrixState._data[0][0].im);
-
-    // console.log(
-    //   "wth, matrixState._data[1][0].re",
-    //   matrixState._data[1][0].re
-    // );
-  // Ensure matrixState is valid before rendering
+  // Guard clause: if matrixState is invalid, do nothing
   if (!matrixState || !matrixState._data) {
-    console.warn(
-      "⚠️ MatrixDisplay received an invalid matrixState!",
-      matrixState
-    );
-    return null; // Prevent rendering if data is invalid
+    console.warn("⚠️ MatrixDisplay received invalid matrixState:", matrixState);
+    return null;
   }
 
+  // Same column structure but read-only
   const columns = [
     {
       dataIndex: "label",
-      render: (text) => <span style={{ color: "grey" }}>{text}</span>,
+      render: (text) => (
+        <span style={{ fontWeight: "bold", color: "grey", marginRight: "6px" }}>
+          {text}
+        </span>
+      ),
     },
     {
       dataIndex: "real",
@@ -33,36 +26,50 @@ const MatrixDisplay = ({ matrixState }) => {
     },
     {
       dataIndex: "plus",
-      render: () => <span style={{ color: "grey" }}>+</span>,
+      render: () => <span style={{ color: "grey", margin: "0 4px" }}>+</span>,
     },
     {
       dataIndex: "imag",
       width: "60px",
       render: (text) => <span style={{ color: "white" }}>{text}</span>,
     },
-    { dataIndex: "i", render: () => <span style={{ color: "grey" }}>i</span> },
+    {
+      dataIndex: "i",
+      render: () => <span style={{ color: "grey", marginLeft: "2px" }}>i</span>,
+    },
   ];
 
+  // Rows for C₀ and C₁, read from matrixState
   const data = [
     {
       key: "c0",
       label: "C₀",
+      parenLeft: "(",
       real: matrixState._data[0][0].re,
+      plus: "+",
       imag: matrixState._data[0][0].im,
+      i: "i",
     },
     {
       key: "c1",
       label: "C₁",
       real: matrixState._data[1][0].re,
+      plus: "+",
       imag: matrixState._data[1][0].im,
+      i: "i",
     },
   ];
 
   return (
     <div className="matrix-wrapper">
+      {/* Left bracket */}
       <div className="matrix-bracket left">
-        ⎡<br />⎣
+        ⎡
+        <br />
+        ⎣
       </div>
+
+      {/* Table content (read-only) */}
       <div className="matrix-content">
         <Table
           columns={columns}
@@ -70,11 +77,15 @@ const MatrixDisplay = ({ matrixState }) => {
           pagination={false}
           bordered={false}
           size="small"
-          style={{ width: "110px", textAlign: "center" }}
+          style={{ width: "180px", textAlign: "center" }}
         />
       </div>
+
+      {/* Right bracket */}
       <div className="matrix-bracket right">
-        ⎤<br />⎦
+        ⎤
+        <br />
+        ⎦ 
       </div>
     </div>
   );
