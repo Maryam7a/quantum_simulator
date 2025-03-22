@@ -29,6 +29,7 @@ body {
   flex-direction: column;
   height: 100vh;
   padding: 20px;
+  margin: 0 auto;    /* Center the container horizontally */
 }
 
 /* Header */
@@ -105,6 +106,7 @@ input.invalid {
   padding-top: 0px;
   /* gap: 20px; */
   height: 100%;
+  overflow: visible; /* Removes scrolling */
 }
 
 /* Responsive adjustment */
@@ -127,10 +129,8 @@ input.invalid {
 
 /* Bloch Sphere Container */
 .bloch-container {
-  flex: 1;
   background: var(--secondary-bg);
   border-radius: 8px;
-  /* padding: 5px; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -168,16 +168,6 @@ input.invalid {
 .matrix-table tr:nth-child(even) {
   background: rgba(255, 255, 255, 0.05);
 }
-
-/* Quantum Matrix Container */
-/* .quantum-matrix-container {
-  width: 100%;
-  padding: 15px; 
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--accent-color);
-  border-radius: 8px;
-  margin: 10px 0;
-} */
 
 /* Tabs (if used) */
 
