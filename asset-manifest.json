@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/quantum_simulator/static/css/main.4a8e0298.css",
+    "main.css": "/quantum_simulator/static/css/main.fd50071d.css",
     "main.js": "/quantum_simulator/static/js/main.d49a3ba3.js",
     "static/js/453.93188c5e.chunk.js": "/quantum_simulator/static/js/453.93188c5e.chunk.js",
     "static/media/Nust-logo.jpg": "/quantum_simulator/static/media/Nust-logo.79434981957b8fc82be8.jpg",
     "index.html": "/quantum_simulator/index.html",
-    "main.4a8e0298.css.map": "/quantum_simulator/static/css/main.4a8e0298.css.map",
+    "main.fd50071d.css.map": "/quantum_simulator/static/css/main.fd50071d.css.map",
     "main.d49a3ba3.js.map": "/quantum_simulator/static/js/main.d49a3ba3.js.map",
     "453.93188c5e.chunk.js.map": "/quantum_simulator/static/js/453.93188c5e.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.4a8e0298.css",
+    "static/css/main.fd50071d.css",
     "static/js/main.d49a3ba3.js"
   ]
 }
