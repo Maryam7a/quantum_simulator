@@ -2,6 +2,7 @@
   "name": "quantum_simulator",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://Maryam7a.github.io/quantum_simulator",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
