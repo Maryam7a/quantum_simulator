@@ -92,7 +92,14 @@ const BlochSphere = ({
         rotationAxis.set(0, -1, 0);
         break;
       case "H":
-        rotationAxis.set(1, 0, 1).normalize();
+        rotationAxis.set(0, 0.707, 0.707).normalize();
+        break;
+      case "S":
+        rotationAxis.set(0, -1, 0);
+        remainingAngle = Math.PI / 2; // 90° rotation
+        break;
+      case "T":
+        rotationAxis.set(0, -1, 0);
         break;
       default:
         console.log("No transformation defined for gate:", gate);

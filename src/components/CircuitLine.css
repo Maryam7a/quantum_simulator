@@ -1,6 +1,6 @@
 /* entire container */
 .circuit-line-container {
-    border-color: #1bdb09;
+    /* border-color: #1bdb09; */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -13,9 +13,9 @@
 
 /* Qubit label (|q₀⟩) styling */
 .qubit-label {
-    border-color: #1bdb09;
-    padding-top: 37%;
-    padding-bottom: 5px;
+    /* border-color: #1bdb09; */
+    padding-top: 15%;
+    padding-bottom: 20%;
     font-size: 1.5rem;
     color: rgb(188, 177, 177);
     font-weight: bold;
@@ -23,8 +23,8 @@
 
 /* weird inside container with gates and matrices*/
 .circuit-line {
-    color: #1bdb09;
-    border-color: #1bdb09;
+    /* color: #1bdb09; */
+    /* border-color: #1bdb09; */
     position: relative;
     height: 100%;
     width: 80%;
@@ -46,7 +46,7 @@
     /* margin-bottom: 30px; */
     /* padding-bottom: 0px; */
     position: absolute;
-    top: 35%;
+    top: 20%;
     /* left: 0; */
     height: 1%;
     /* Line thickness */
@@ -84,7 +84,7 @@
 /* Ensure gates & matrices align properly */
 .gate-matrix-container {
     /* background-color: pink; */
-    border-color: rgb(44, 219, 59);
+    /* border-color: rgb(44, 219, 59); */
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -127,15 +127,17 @@
 }
 /*between the applied gate and the updated matrix*/
 .transparent-container{
+    /* border-color: rgb(44, 219, 59); */
+    /* border: 1px solid #cb5908; */
     background-color: transparent;
     height:50px;
 }
 
 .qubit-matrix-container{
-    /* border: 1px solid #cb5908; */
+    border: 1px solid #d813df;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    /* justify-content: flex-start; */
     align-items: center;
     margin-right: 20px;
     height: 100%;
@@ -143,11 +145,13 @@
 
 /* Validate button inside qubit-matrix-container */
 .validate-button-container { 
+    /* border: 1px solid #08cb49; */
     display: flex;
     justify-content: center;
     /* Center horizontally */ 
     align-items: center;
-    padding-bottom : 50px;
+    padding-top : 0px;
+    margin-top: 0px;
     /* Space below the quantum matrix */
     width: fit-content; 
     /* Reduce width to fit button */
@@ -157,10 +161,10 @@
 .validate-button {
     width: 25px;
     height: 25px;
-    background-color: #008cba;
+    background-color: #10b233;
     color: white;
     font-size: 1.2rem;
-    border-radius: 50%;
+    border-radius: 30%;
     border: none;
     display: flex;
     align-items: center;

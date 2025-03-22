@@ -1,8 +1,10 @@
 .bloch-container {
     flex:2;
-    border: 1px solid #cb1b1bc6;
+    border: 1px solid #804febc6;
     width: 50%;
     height: 100%;
+    margin-top: 0px;
+    padding-top: 0%;
     /* Adjust size */
     /* margin: 0 auto; */
     /* Center-align if needed in its own container */

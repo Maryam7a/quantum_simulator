@@ -77,7 +77,7 @@ const MatrixDisplay = ({ matrixState }) => {
           pagination={false}
           bordered={false}
           size="small"
-          style={{ width: "180px", textAlign: "center" }}
+          style={{ width: "170px", textAlign: "center" }}
         />
       </div>
 

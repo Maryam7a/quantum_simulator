@@ -10,7 +10,7 @@ const GatesGrid = ({
   appliedGates, // ✅ Fixed Issue 2
   onMeasure,
 }) => {
-  const gateNames = ["X", "Y", "Z", "H", "I", "M"];
+  const gateNames = ["X", "Y", "Z", "H",  "S", "T", "I", "M"];
 
   const handleGateClick = (gate) => {
     if (buttonsDisabled) return; // Prevent clicking if gates are disabled

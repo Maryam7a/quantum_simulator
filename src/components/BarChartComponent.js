@@ -16,7 +16,7 @@ const BarChartComponent = ({ data, title }) => {
   const probabilities = data ? data : { P0: 0, P1: 0 };
   return (
     <div style={{ width: "80%", padding: "5px" }}>
-      <h3 style={{ textAlign: "center" }}>{title}</h3>
+      <h3 style={{ textAlign: "center", padding:"30px" }}>{title}</h3>
       <ResponsiveContainer width="80%" height={500}>
         <BarChart
           data={[
@@ -28,6 +28,7 @@ const BarChartComponent = ({ data, title }) => {
           <XAxis dataKey="name" />
           <YAxis/>
           <Tooltip />
+          <title>{title}</title>
           {/* <Legend /> */}
           <Bar dataKey="value" fill="#ccd" barSize={60} barGap={1} />
         </BarChart>
