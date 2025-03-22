@@ -134,7 +134,7 @@
 }
 
 .qubit-matrix-container{
-    border: 1px solid #d813df;
+    /* border: 1px solid #d813df; */
     display: flex;
     flex-direction: column;
     /* justify-content: flex-start; */
